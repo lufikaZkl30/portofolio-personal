@@ -62,7 +62,7 @@ export default function HeroSection() {
         
         <h1 className="font-pixel text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6 drop-shadow-[4px_4px_0_theme('colors.primary')]">
           HI, I'M <br className="hidden md:block"/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-gold animate-pulse">LUFIKA</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-gold animate-pulse">LUFIKA AYU FATIMAH</span>
         </h1>
         
         <div className="rpg-panel p-4 inline-block mb-8 pixel-border">
