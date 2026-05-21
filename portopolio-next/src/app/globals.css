@@ -26,29 +26,29 @@
   }
   
   .pixel-border-primary {
-    border: 2px solid theme('colors.primary');
+    border: 2px solid #b026ff;
     box-shadow: 
-      -2px 0 0 theme('colors.primary'),
-      2px 0 0 theme('colors.primary'),
-      0 -2px 0 theme('colors.primary'),
-      0 2px 0 theme('colors.primary');
+      -2px 0 0 #b026ff,
+      2px 0 0 #b026ff,
+      0 -2px 0 #b026ff,
+      0 2px 0 #b026ff;
   }
 
   .pixel-border-gold {
-    border: 2px solid theme('colors.gold');
+    border: 2px solid #ffd700;
     box-shadow: 
-      -2px 0 0 theme('colors.gold'),
-      2px 0 0 theme('colors.gold'),
-      0 -2px 0 theme('colors.gold'),
-      0 2px 0 theme('colors.gold');
+      -2px 0 0 #ffd700,
+      2px 0 0 #ffd700,
+      0 -2px 0 #ffd700,
+      0 2px 0 #ffd700;
   }
 
   .neon-glow {
-    box-shadow: 0 0 10px theme('colors.primary'), 0 0 20px theme('colors.primary');
+    box-shadow: 0 0 10px #b026ff, 0 0 20px #b026ff;
   }
 
   .neon-glow-accent {
-    box-shadow: 0 0 10px theme('colors.accent'), 0 0 20px theme('colors.accent');
+    box-shadow: 0 0 10px #ff4d8c, 0 0 20px #ff4d8c;
   }
 
   .glass-panel {
@@ -59,7 +59,7 @@
 
   .rpg-panel {
     background: rgba(0, 0, 0, 0.85);
-    border: 2px solid theme('colors.primary');
+    border: 2px solid #b026ff;
     box-shadow: 
       0 0 15px rgba(176, 38, 255, 0.4),
       inset 0 0 20px rgba(176, 38, 255, 0.2);
@@ -73,19 +73,19 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     pointer-events: none;
   }
-}
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-}
-::-webkit-scrollbar-thumb {
-  background: theme('colors.primary');
-  border: 1px solid black;
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #b026ff;
+    border: 1px solid black;
+  }
 }
 
 /* Background Grid */

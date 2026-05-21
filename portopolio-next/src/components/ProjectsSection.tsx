@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function ProjectsSection() {
@@ -8,7 +7,7 @@ export default function ProjectsSection() {
     {
       title: "AI Decision Web App",
       desc: "AI-powered decision support system with smart recommendations.",
-      img: "/img/project-1.png",
+      img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80",
       tags: ["React", "Python", "Tailwind"],
       demo: "#",
       code: "https://github.com/lufikaZkl30/classteams-info",
@@ -17,7 +16,7 @@ export default function ProjectsSection() {
     {
       title: "Portfolio Website",
       desc: "Personal portfolio with pixel game aesthetics and dark mode.",
-      img: "/img/project-2.png",
+      img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80",
       tags: ["HTML", "Tailwind", "JavaScript"],
       demo: "#",
       code: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
@@ -25,7 +24,7 @@ export default function ProjectsSection() {
     {
       title: "Dashboard UI",
       desc: "Modern dashboard interface for analytics and management.",
-      img: "/img/project-3.png",
+      img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
       tags: ["Figma", "React", "Chart.js"],
       demo: "https://luviasakura-bio.netlify.app",
       code: "#",
@@ -33,7 +32,7 @@ export default function ProjectsSection() {
     {
       title: "Landing Page Concept",
       desc: "Creative landing page concept for tech startup product.",
-      img: "/img/project-4.png",
+      img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
       tags: ["Figma", "Tailwind", "UI Design"],
       demo: "https://mindease-ai.netlify.app/",
       code: "#",
@@ -64,13 +63,11 @@ export default function ProjectsSection() {
           >
             {/* Image */}
             <div className="relative w-full h-40 sm:h-44 md:h-36 lg:h-44 overflow-hidden">
-              <Image
+              <img
                 src={project.img}
                 alt={project.title}
-                fill
-                sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105 brightness-75"
-                onError={() => { /* fallback handled by browser */ }}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 brightness-75"
+                onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80'; }}
               />
 
               {project.isNew && (
