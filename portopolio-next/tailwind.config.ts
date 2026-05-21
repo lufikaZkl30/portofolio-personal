@@ -5,6 +5,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/layouts/**/*.{js,ts,jsx,tsx,mdx}", // Include layouts directory
   ],
   theme: {
     extend: {
@@ -16,6 +17,10 @@ const config: Config = {
         accent: "#ff4d8c", // Soft pink
         gold: "#ffd700", // Pixel gold
         muted: "#9898cc",
+      },
+      zIndex: {
+        "-40": "-40",
+        "-50": "-50",
       },
       fontFamily: {
         pixel: ["var(--font-press-start)"],
