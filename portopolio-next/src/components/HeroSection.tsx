@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import characterImage from "@/assets/images/pp.png";
 
 export default function HeroSection() {
   return (
@@ -36,7 +38,14 @@ export default function HeroSection() {
 
           {/* Character Placeholer */}
           <div className="w-32 h-32 md:w-40 md:h-40 relative z-20 flex items-center justify-center text-7xl drop-shadow-[0_0_15px_rgba(176,38,255,0.6)] group">
-            🧙‍♀️
+            <Image 
+              src={characterImage} 
+              alt="Pixel Character" 
+              className="w-full h-full object-cover rounded-full border-4 border-white/20 group-hover:border-primary transition-colors"
+              priority
+              sizes="(max-width: 768px) 128px, 160px"
+            />
+
             <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl -z-10 group-hover:bg-primary/40 transition-colors"></div>
           </div>
           
