@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 // import { motion } from "framer-motion";
-import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight } from "lucide-react";
+import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight, Bot, Sparkles, Palette } from "lucide-react";
 
 interface Island {
   id: string;
@@ -21,83 +21,101 @@ export default function ProjectsSectionNew() {
   const [mapState, setMapState] = useState<'map' | 'zooming_in' | 'island' | 'zooming_out'>('map'); 
   const [selectedIsland, setSelectedIsland] = useState<Island | null>(null);
   
-  const projects = [
-    {
-      id: 1,
-      title: "Eco-Tracker App",
-      category: "code",
-      desc: "A gamified web app to track daily carbon footprint. Built to encourage sustainable habits through a cozy UI.",
-      tech: ["React", "Tailwind", "Chart.js"],
-      color: "#A3C9A8",
-      img: "/assets/images/eco-tracker.png",
-    },
-    {
-      id: 2,
-      title: "Midnight Lo-Fi",
-      category: "music",
-      desc: "A 4-track EP of ambient beats designed for late-night coding sessions and studying.",
-      tech: ["Ableton", "Analog Synths", "Foley"],
-      color: "#D4A373",
-      img: "/assets/images/midnight-lo-fi.png"
-    },
-    {
-      id: 3,
-      title: "Indie Game Trailer",
-      category: "edit",
-      desc: "Kinetic typography and fast-paced editing for an upcoming pixel-art indie game release.",
-      tech: ["Premiere", "After Effects"],
-      color: "#A2D2FF",
-      img: "/assets/images/indie-game-trailer.png"
-    },
-    {
-      id: 4,
-      title: "Weather Station UI",
-      category: "code",
-      desc: "A beautifully animated weather dashboard that changes its visual theme based on live weather data.",
-      tech: ["Next.js", "Framer Motion", "API"],
-      color: "#A3C9A8",
-      img: "/assets/images/weather-station.png"
-    }
-  ];
+  // ==============================
+  // PROJECT DATA
+  // ==============================
+const projects = [
+  {
+    id: 1,
+    title: "ClassTeams-Info",
+    category: "code",
+    icon: Code2,
+    desc: "Website yang digunakan untuk mempromosikan kelas teams yang saya buat menggunakan Next.js dan Tailwind CSS.",
+    tech: ["Next.js", "Tailwind CSS", "Supabase"],
+    color: "#A3C9A8",
+    img: "img/project-1.png",
+    demo: "#",
+    github: "https://github.com/lufikaZkl30/classteams-info",
+  },
+  {
+    id: 2,
+    title: "YT Emotion Analyzer",
+    category: "code",
+    icon: Code2,
+    desc: "Website untuk menganalisa komentar YouTube menggunakan Google API dan menampilkan hasil diagram interaktif dengan Chart.js.",
+    tech: ["HTML", "Tailwind CSS", "JavaScript", "Python"],
+    color: "#A2D2FF",
+    img: "img/project-2.png",
+    demo: "#",
+    github: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
+  },
+  {
+    id: 3,
+    title: "MindEase Bot AI",
+    category: "ai",
+    icon: Bot,
+    desc: "Chatbot AI yang membantu pengguna mengelola stres dengan dukungan emosional, relaksasi, dan latihan pernapasan.",
+    tech: ["Node.js", "JavaScript", "Tailwind CSS", "Gemini API"],
+    color: "#FDE2E4",
+    img: "img/project-3.png",
+    demo: "#",
+    github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real",
+  },
+  {
+    id: 4,
+    title: "Landing Page Concept",
+    category: "design",
+    icon: Palette,
+    desc: "Creative landing page design untuk branding startup dan digital product.",
+    tech: ["UI Design", "Figma"],
+    color: "#D4A373",
+    img: "img/project-4.png",
+    demo: "#",
+    github: "#",
+  }
+];
 
-  const islands: Island[] = [
-    {
-      id: 'code',
-      title: 'Web Dev Village',
-      color: '#A3C9A8',
-      darkColor: '#7A9D7E',
-      position: 'top-[8%] left-[5%] md:top-[15%] md:left-[12%]',
-      size: 'w-44 h-44 md:w-60 md:h-60',
-      icon: Code2,
-      decor: Trees,
-      animationDelay: '0s',
-      borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
-    },
-    {
-      id: 'edit',
-      title: 'Creative Studio',
-      color: '#FDE2E4',
-      darkColor: '#D3A5A9',
-      position: 'bottom-[5%] left-[50%] -translate-x-1/2 md:bottom-[10%]',
-      size: 'w-48 h-48 md:w-72 md:h-72',
-      icon: Video,
-      decor: Tent,
-      animationDelay: '1.5s',
-      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
-    },
-    {
-      id: 'music',
-      title: 'Music Lake',
-      color: '#A2D2FF',
-      darkColor: '#7AABC8',
-      position: 'top-[15%] right-[5%] md:top-[20%] md:right-[10%]',
-      size: 'w-36 h-36 md:w-52 md:h-52',
-      icon: Music,
-      decor: Star,
-      animationDelay: '0.7s',
-      borderRadius: '50% 50% 60% 40% / 40% 60% 40% 60%'
-    }
-  ];
+// ==============================
+// ISLAND DATA
+// ==============================
+const islands = [
+  {
+    id: 'code',
+    title: 'Web Dev Village',
+    color: '#A3C9A8',
+    darkColor: '#7A9D7E',
+    position: 'top-[8%] left-[5%] md:top-[15%] md:left-[12%]',
+    size: 'w-44 h-44 md:w-60 md:h-60',
+    icon: Code2,
+    decor: Trees,
+    animationDelay: '0s',
+    borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
+  },
+  {
+    id: 'ai',
+    title: 'AI Island',
+    color: '#FDE2E4',
+    darkColor: '#D3A5A9',
+    position: 'bottom-[5%] left-[50%] -translate-x-1/2 md:bottom-[10%]',
+    size: 'w-48 h-48 md:w-72 md:h-72',
+    icon: Bot,
+    decor: Sparkles,
+    animationDelay: '1.5s',
+    borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
+  },
+  {
+    id: 'design',
+    title: 'Creative Studio',
+    color: '#D4A373',
+    darkColor: '#B07D4F',
+    position: 'top-[15%] right-[5%] md:top-[20%] md:right-[10%]',
+    size: 'w-36 h-36 md:w-52 md:h-52',
+    icon: Palette,
+    decor: Star,
+    animationDelay: '0.7s',
+    borderRadius: '50% 50% 60% 40% / 40% 60% 40% 60%'
+  }
+];
 
   const handleIslandClick = (island: Island) => {
     setSelectedIsland(island);

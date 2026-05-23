@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Press_Start_2P, Space_Grotesk, VT323 } from "next/font/google";
 import "./globals.css";
 
+
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const pressStart2P = Press_Start_2P({ 
   weight: "400", 
@@ -22,6 +23,9 @@ const vt323 = VT323({
 export const metadata: Metadata = {
   title: "Lufika Ayu Fatimah |  Portfolio - Personal Website",
   description: "UI/UX Designer & Front-End Developer & AI Developer Portfolio",
+  icons: {
+    icon: "/img/icon-web.jpeg",
+  },
 };
 
 export default function RootLayout({
