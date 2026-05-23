@@ -29,7 +29,7 @@ export default function AboutSectionNew() {
                       className="w-full h-full object-cover rounded-full"
                     />
                  </div>
-                 <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">Lufika Ayu Fatimah</h3>
+                 <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">LUFIKA AYU FATIMAH</h3>
                  <p className="text-slate-600 text-sm mb-4">Multidisciplinary Creator</p>
                  <p className="text-slate-600 text-xs italic">"Crafting cozy corners of the internet, one pixel at a time."</p>
                  <p className="text-slate-600 text-sm">Level 99 Multidisciplinary Artist</p>
