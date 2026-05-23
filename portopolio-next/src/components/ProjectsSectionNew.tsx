@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 // import { motion } from "framer-motion";
-import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight, Bot, Sparkles, Palette } from "lucide-react";
+import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight } from "lucide-react";
 
 interface Island {
   id: string;
@@ -17,105 +17,170 @@ interface Island {
   borderRadius: string;
 }
 
+// Projek section dengan konsep peta dunia pulau-pulau, setiap pulau mewakili kategori proyek (coding, editing, music) dengan animasi mengambang dan efek interaktif saat dipilih.
 export default function ProjectsSectionNew() {
   const [mapState, setMapState] = useState<'map' | 'zooming_in' | 'island' | 'zooming_out'>('map'); 
   const [selectedIsland, setSelectedIsland] = useState<Island | null>(null);
   
-  // ==============================
-  // PROJECT DATA
-  // ==============================
-const projects = [
+  const projects = [
+
+  // =====================================
+  // CODE PROJECTS
+  // =====================================
   {
     id: 1,
     title: "ClassTeams-Info",
     category: "code",
-    icon: Code2,
-    desc: "Website yang digunakan untuk mempromosikan kelas teams yang saya buat menggunakan Next.js dan Tailwind CSS.",
+    desc: "Website yang digunakan untuk mempromosikan kelas teams menggunakan Next.js dan Tailwind CSS.",
     tech: ["Next.js", "Tailwind CSS", "Supabase"],
     color: "#A3C9A8",
-    img: "img/project-1.png",
+    img: "/public/images/project-1.png",
     demo: "#",
     github: "https://github.com/lufikaZkl30/classteams-info",
   },
+
   {
     id: 2,
     title: "YT Emotion Analyzer",
     category: "code",
-    icon: Code2,
-    desc: "Website untuk menganalisa komentar YouTube menggunakan Google API dan menampilkan hasil diagram interaktif dengan Chart.js.",
+    desc: "Website untuk menganalisa komentar YouTube menggunakan Google API dan Chart.js.",
     tech: ["HTML", "Tailwind CSS", "JavaScript", "Python"],
     color: "#A2D2FF",
-    img: "img/project-2.png",
+    img: "/public/images/project-2.png",
     demo: "#",
     github: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
   },
+
   {
     id: 3,
     title: "MindEase Bot AI",
-    category: "ai",
-    icon: Bot,
-    desc: "Chatbot AI yang membantu pengguna mengelola stres dengan dukungan emosional, relaksasi, dan latihan pernapasan.",
-    tech: ["Node.js", "JavaScript", "Tailwind CSS", "Gemini API"],
+    category: "code",
+    desc: "AI chatbot untuk membantu pengguna mengelola stres dan relaksasi.",
+    tech: ["Node.js", "JavaScript", "Gemini API"],
     color: "#FDE2E4",
-    img: "img/project-3.png",
+    img: "/public/images/project-3.png",
     demo: "#",
     github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real",
   },
+
+  // =====================================
+  // MUSIC PROJECTS
+  // =====================================
   {
     id: 4,
-    title: "Landing Page Concept",
-    category: "design",
-    icon: Palette,
-    desc: "Creative landing page design untuk branding startup dan digital product.",
-    tech: ["UI Design", "Figma"],
-    color: "#D4A373",
-    img: "img/project-4.png",
+    title: "Midnight Memories",
+    category: "music",
+    desc: "Lo-fi instrumental soundtrack dengan nuansa malam dan nostalgia.",
+    tech: ["FL Studio", "Lo-Fi", "Mixing"],
+    color: "#89C2D9",
+    img: "/public/images/music-1.png",
     demo: "#",
     github: "#",
-  }
+  },
+
+  {
+    id: 5,
+    title: "Dreamwave Beats",
+    category: "music",
+    desc: "Kumpulan chill beat ambient untuk menemani belajar dan coding malam.",
+    tech: ["Ableton", "Ambient", "Synth"],
+    color: "#B8C0FF",
+    img: "/public/images/music-2.png",
+    demo: "#",
+    github: "#",
+  },
+
+  {
+    id: 6,
+    title: "Rainy Piano Session",
+    category: "music",
+    desc: "Komposisi piano santai dengan efek hujan untuk suasana relaxing.",
+    tech: ["Piano", "Audio Editing", "Reverb"],
+    color: "#CDB4DB",
+    img: "/public/images/music-3.png",
+    demo: "#",
+    github: "#",
+  },
+
+  // =====================================
+  // EDITING PROJECTS
+  // =====================================
+  {
+    id: 7,
+    title: "Anime Velocity Edit",
+    category: "edit",
+    desc: "Cinematic anime edit dengan transisi cepat dan efek velocity smooth.",
+    tech: ["After Effects", "AMV", "Velocity"],
+    color: "#FFAFCC",
+    img: "/public/images/edit-1.png",
+    demo: "#",
+    github: "#",
+  },
+
+  {
+    id: 8,
+    title: "Game Trailer Edit",
+    category: "edit",
+    desc: "Trailer editing untuk indie game dengan nuansa cinematic modern.",
+    tech: ["Premiere Pro", "Motion Blur", "Sound FX"],
+    color: "#FFC8A2",
+    img: "/public/images/edit-2.png",
+    demo: "#",
+    github: "#",
+  },
+
+  {
+    id: 9,
+    title: "CORTIS Performance Edit",
+    category: "edit",
+    desc: "Fan-edit performance idol group dengan style energetic dan colorful.",
+    tech: ["After Effects", "Sync Beat", "Transitions"],
+    color: "#FFD6A5",
+    img: "/public/images/edit-3.png",
+    demo: "#",
+    github: "#",
+  },
 ];
 
-// ==============================
-// ISLAND DATA
-// ==============================
-const islands = [
-  {
-    id: 'code',
-    title: 'Web Dev Village',
-    color: '#A3C9A8',
-    darkColor: '#7A9D7E',
-    position: 'top-[8%] left-[5%] md:top-[15%] md:left-[12%]',
-    size: 'w-44 h-44 md:w-60 md:h-60',
-    icon: Code2,
-    decor: Trees,
-    animationDelay: '0s',
-    borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
-  },
-  {
-    id: 'ai',
-    title: 'AI Island',
-    color: '#FDE2E4',
-    darkColor: '#D3A5A9',
-    position: 'bottom-[5%] left-[50%] -translate-x-1/2 md:bottom-[10%]',
-    size: 'w-48 h-48 md:w-72 md:h-72',
-    icon: Bot,
-    decor: Sparkles,
-    animationDelay: '1.5s',
-    borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
-  },
-  {
-    id: 'design',
-    title: 'Creative Studio',
-    color: '#D4A373',
-    darkColor: '#B07D4F',
-    position: 'top-[15%] right-[5%] md:top-[20%] md:right-[10%]',
-    size: 'w-36 h-36 md:w-52 md:h-52',
-    icon: Palette,
-    decor: Star,
-    animationDelay: '0.7s',
-    borderRadius: '50% 50% 60% 40% / 40% 60% 40% 60%'
-  }
-];
+// Define the islands representing project categories
+  const islands: Island[] = [
+    {
+      id: 'code',
+      title: 'Web Dev Village',
+      color: '#A3C9A8',
+      darkColor: '#7A9D7E',
+      position: 'top-[8%] left-[5%] md:top-[15%] md:left-[12%]',
+      size: 'w-44 h-44 md:w-60 md:h-60',
+      icon: Code2,
+      decor: Trees,
+      animationDelay: '0s',
+      borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
+    },
+    {
+      id: 'edit',
+      title: 'Creative Studio',
+      color: '#FDE2E4',
+      darkColor: '#D3A5A9',
+      position: 'bottom-[5%] left-[50%] -translate-x-1/2 md:bottom-[10%]',
+      size: 'w-48 h-48 md:w-72 md:h-72',
+      icon: Video,
+      decor: Tent,
+      animationDelay: '1.5s',
+      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
+    },
+    {
+      id: 'music',
+      title: 'Music Lake',
+      color: '#A2D2FF',
+      darkColor: '#7AABC8',
+      position: 'top-[15%] right-[5%] md:top-[20%] md:right-[10%]',
+      size: 'w-36 h-36 md:w-52 md:h-52',
+      icon: Music,
+      decor: Star,
+      animationDelay: '0.7s',
+      borderRadius: '50% 50% 60% 40% / 40% 60% 40% 60%'
+    }
+  ];
 
   const handleIslandClick = (island: Island) => {
     setSelectedIsland(island);
@@ -299,7 +364,7 @@ const islands = [
                             className="w-24 h-24 rounded-3xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500"
                             style={{ backgroundColor: selectedIsland.color }}
                           >
-                            <project.icon size={48} />
+                            <selectedIsland.icon size={48} />
                           </div>
                           <span className="text-xs font-bold tracking-widest uppercase text-slate-500 px-4">{project.category}</span>
                         </div>
