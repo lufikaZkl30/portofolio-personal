@@ -41,7 +41,7 @@ export default function SkillsSection() {
       icon: Music,
       color: '#D4A373',
       align: 'left',
-      desc: 'Mata air inspirasi tempat saya meracik nada, harmoni, dan ambient soundscapes.',
+      desc: 'A wellspring of inspiration where I craft melodies, harmonies, and ambient soundscapes.',
       skills: ['Ableton Live', 'Synthesizers', 'Mixing & Mastering', 'Foley & Sound Design']
     },
     {
@@ -51,7 +51,7 @@ export default function SkillsSection() {
       icon: Code2,
       color: '#A3C9A8',
       align: 'right',
-      desc: 'Arus deras tempat logika dan desain mengalir menjadi pengalaman interaktif.',
+      desc: 'A rushing stream where logic and design flow into an interactive experience.',
       skills: ['React & Next.js', 'Tailwind CSS', 'JavaScript (ES6+)', 'Framer Motion']
     },
     {
@@ -61,7 +61,7 @@ export default function SkillsSection() {
       icon: Video,
       color: '#A2D2FF',
       align: 'left',
-      desc: 'Muara tempat suara dan interaksi disatukan menjadi mahakarya sinematik.',
+      desc: 'The mouth where sound and interaction are united into a cinematic masterpiece.',
       skills: ['Premiere Pro', 'After Effects', 'Color Grading', 'Motion Graphics']
     }
   ];
@@ -183,7 +183,7 @@ export default function SkillsSection() {
              <span className="font-bold text-sm tracking-widest uppercase">Skill Journey</span>
           </div>
           <h2 className="font-pixel text-4xl md:text-5xl text-[#2C3E50]">The River of Creativity</h2>
-          <p className="text-slate-500 mt-4 max-w-md font-medium">Ikuti aliran perjalananku dari meracik nada hingga merangkai kode dan visual.</p>
+          <p className="text-slate-500 mt-4 max-w-md font-medium">Follow my journey from composing music to crafting code and visuals.</p>
         </div>
 
         {/* Simple Alternating Layout */}

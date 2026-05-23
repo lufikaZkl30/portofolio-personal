@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight } from "lucide-react";
 
 interface Island {
@@ -29,7 +29,7 @@ export default function ProjectsSectionNew() {
       desc: "A gamified web app to track daily carbon footprint. Built to encourage sustainable habits through a cozy UI.",
       tech: ["React", "Tailwind", "Chart.js"],
       color: "#A3C9A8",
-      icon: Trees
+      img: "/assets/images/eco-tracker.png",
     },
     {
       id: 2,
@@ -38,7 +38,7 @@ export default function ProjectsSectionNew() {
       desc: "A 4-track EP of ambient beats designed for late-night coding sessions and studying.",
       tech: ["Ableton", "Analog Synths", "Foley"],
       color: "#D4A373",
-      icon: Music
+      img: "/assets/images/midnight-lo-fi.png"
     },
     {
       id: 3,
@@ -47,7 +47,7 @@ export default function ProjectsSectionNew() {
       desc: "Kinetic typography and fast-paced editing for an upcoming pixel-art indie game release.",
       tech: ["Premiere", "After Effects"],
       color: "#A2D2FF",
-      icon: Video
+      img: "/assets/images/indie-game-trailer.png"
     },
     {
       id: 4,
@@ -56,7 +56,7 @@ export default function ProjectsSectionNew() {
       desc: "A beautifully animated weather dashboard that changes its visual theme based on live weather data.",
       tech: ["Next.js", "Framer Motion", "API"],
       color: "#A3C9A8",
-      icon: Cloud
+      img: "/assets/images/weather-station.png"
     }
   ];
 
