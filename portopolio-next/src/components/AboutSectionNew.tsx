@@ -29,7 +29,9 @@ export default function AboutSectionNew() {
                       className="w-full h-full object-cover rounded-full"
                     />
                  </div>
-                 <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">Creative Spirit</h3>
+                 <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">Lufika Ayu Fatimah</h3>
+                 <p className="text-slate-600 text-sm mb-4">Multidisciplinary Creator</p>
+                 <p className="text-slate-600 text-xs italic">"Crafting cozy corners of the internet, one pixel at a time."</p>
                  <p className="text-slate-600 text-sm">Level 99 Multidisciplinary Artist</p>
                  
                  <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2">
@@ -57,7 +59,7 @@ export default function AboutSectionNew() {
                   <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Years Exploring</span>
                 </div>
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#A2D2FF]">
-                  <span className="font-pixel text-3xl text-[#2C3E50]">50+</span>
+                  <span className="font-pixel text-3xl text-[#2C3E50]">30+</span>
                   <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Artifacts Made</span>
                 </div>
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#D4A373]">

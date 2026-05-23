@@ -40,13 +40,13 @@ export default function ContactSectionNew() {
           </form>
 
           <div className="flex items-center justify-center gap-6 relative z-10 pt-8 border-t border-slate-200">
-            <a href="#" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
+            <a href="https://github.com/lufikaZkl30" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
               <Github size={24} />
             </a>
-            <a href="#" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
+            <a href="https://twitter.com/lufikaayu" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
               <Twitter size={24} />
             </a>
-            <a href="#" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
+            <a href="https://www.linkedin.com/in/lufikaayud/" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
               <Linkedin size={24} />
             </a>
           </div>
