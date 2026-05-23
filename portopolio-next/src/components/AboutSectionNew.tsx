@@ -23,7 +23,11 @@ export default function AboutSectionNew() {
               <div className="absolute inset-0 bg-[#FDE2E4] rounded-3xl transform -rotate-2 border-4 border-white shadow-xl interactive-hover z-10 overflow-hidden flex flex-col items-center justify-center p-8 text-center">
                  {/* Abstract representation of the creator */}
                  <div className="w-32 h-32 rounded-full bg-white mb-6 shadow-inner flex items-center justify-center border-4 border-[#FCD5D8]">
-                    <Sparkles size={48} className="text-[#D4A373] animate-pulse-soft" />
+                    <img
+                      src="/assets/images/me-lufika.png"
+                      alt="my photo"
+                      className="w-full h-full object-cover rounded-full"
+                    />
                  </div>
                  <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">Creative Spirit</h3>
                  <p className="text-slate-600 text-sm">Level 99 Multidisciplinary Artist</p>
