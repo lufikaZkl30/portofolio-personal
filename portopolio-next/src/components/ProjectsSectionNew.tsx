@@ -31,10 +31,10 @@ export default function ProjectsSectionNew() {
     id: 1,
     title: "ClassTeams-Info",
     category: "code",
-    desc: "Website yang digunakan untuk mempromosikan kelas teams menggunakan Next.js dan Tailwind CSS.",
+    desc: "The website used to promote Teams classes uses Next.js and Tailwind CSS.",
     tech: ["Next.js", "Tailwind CSS", "Supabase"],
     color: "#A3C9A8",
-    img: "/public/images/project-1.png",
+    img: "/assets/images/project-1.png",
     demo: "#",
     github: "https://github.com/lufikaZkl30/classteams-info",
   },
@@ -43,10 +43,10 @@ export default function ProjectsSectionNew() {
     id: 2,
     title: "YT Emotion Analyzer",
     category: "code",
-    desc: "Website untuk menganalisa komentar YouTube menggunakan Google API dan Chart.js.",
+    desc: "A website for analyzing YouTube comments using the Google API and Chart.js.",
     tech: ["HTML", "Tailwind CSS", "JavaScript", "Python"],
     color: "#A2D2FF",
-    img: "/public/images/project-2.png",
+    img: "/assets/images/project-2.png",
     demo: "#",
     github: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
   },
@@ -55,10 +55,10 @@ export default function ProjectsSectionNew() {
     id: 3,
     title: "MindEase Bot AI",
     category: "code",
-    desc: "AI chatbot untuk membantu pengguna mengelola stres dan relaksasi.",
+    desc: "AI chatbot for helping users manage stress and relaxation.",
     tech: ["Node.js", "JavaScript", "Gemini API"],
     color: "#FDE2E4",
-    img: "/public/images/project-3.png",
+    img: "/assets/images/project-3.png",
     demo: "#",
     github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real",
   },
@@ -66,41 +66,18 @@ export default function ProjectsSectionNew() {
   // =====================================
   // MUSIC PROJECTS
   // =====================================
+
   {
     id: 4,
-    title: "Midnight Memories",
+    title: "Loser In You (Prod.Lotus)",
     category: "music",
-    desc: "Lo-fi instrumental soundtrack dengan nuansa malam dan nostalgia.",
-    tech: ["FL Studio", "Lo-Fi", "Mixing"],
+    desc: "“Loser In You” is a song about the loss of a once-close friendship. It tells of memories that are hard to forget and feelings that linger to this day.",
+    tech: ["BandLab", "R&B & Soul", "Mixing","Collaboration"],
     color: "#89C2D9",
-    img: "/public/images/music-1.png",
-    demo: "#",
-    github: "#",
+    img: "/assets/images/music-1.png",
+    bandLab: "https://www.bandlab.com/post/d733931e-5776-49c3-9cd6-d1dcdfd835f1",
   },
 
-  {
-    id: 5,
-    title: "Dreamwave Beats",
-    category: "music",
-    desc: "Kumpulan chill beat ambient untuk menemani belajar dan coding malam.",
-    tech: ["Ableton", "Ambient", "Synth"],
-    color: "#B8C0FF",
-    img: "/public/images/music-2.png",
-    demo: "#",
-    github: "#",
-  },
-
-  {
-    id: 6,
-    title: "Rainy Piano Session",
-    category: "music",
-    desc: "Komposisi piano santai dengan efek hujan untuk suasana relaxing.",
-    tech: ["Piano", "Audio Editing", "Reverb"],
-    color: "#CDB4DB",
-    img: "/public/images/music-3.png",
-    demo: "#",
-    github: "#",
-  },
 
   // =====================================
   // EDITING PROJECTS
@@ -112,34 +89,11 @@ export default function ProjectsSectionNew() {
     desc: "Cinematic anime edit dengan transisi cepat dan efek velocity smooth.",
     tech: ["After Effects", "AMV", "Velocity"],
     color: "#FFAFCC",
-    img: "/public/images/edit-1.png",
-    demo: "#",
-    github: "#",
+    img: "/assets/images/edit-1.png",
+    Youtube: "#",
   },
 
-  {
-    id: 8,
-    title: "Game Trailer Edit",
-    category: "edit",
-    desc: "Trailer editing untuk indie game dengan nuansa cinematic modern.",
-    tech: ["Premiere Pro", "Motion Blur", "Sound FX"],
-    color: "#FFC8A2",
-    img: "/public/images/edit-2.png",
-    demo: "#",
-    github: "#",
-  },
-
-  {
-    id: 9,
-    title: "CORTIS Performance Edit",
-    category: "edit",
-    desc: "Fan-edit performance idol group dengan style energetic dan colorful.",
-    tech: ["After Effects", "Sync Beat", "Transitions"],
-    color: "#FFD6A5",
-    img: "/public/images/edit-3.png",
-    demo: "#",
-    github: "#",
-  },
+ 
 ];
 
 // Define the islands representing project categories
@@ -345,28 +299,24 @@ export default function ProjectsSectionNew() {
                     >
                       {/* Project Preview Area */}
                       <div 
-                        className="w-full h-48 md:h-56 relative overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500 origin-top"
+                        className="w-full h-48 md:h-56 relative overflow-hidden flex items-center justify-center bg-cover bg-center"
                         style={{
-                          background: `linear-gradient(135deg, ${selectedIsland.color}20 0%, ${selectedIsland.color}40 100%)`,
+                          backgroundImage: `url('${project.img}')`,
                           borderBottom: `2px solid ${selectedIsland.color}30`
                         }}
                       >
-                        {/* Animated Background Pattern */}
-                        <div className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity">
-                          <div className="absolute top-4 right-4 w-20 h-20 rounded-full" style={{ backgroundColor: selectedIsland.color, opacity: 0.3 }}></div>
-                          <div className="absolute bottom-8 left-8 w-32 h-32 rounded-full" style={{ backgroundColor: selectedIsland.color, opacity: 0.2 }}></div>
-                          <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-lg transform rotate-45" style={{ backgroundColor: selectedIsland.color, opacity: 0.25 }}></div>
-                        </div>
+                        {/* Overlay Gradient */}
+                        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${selectedIsland.color}40 0%, ${selectedIsland.color}60 100%)` }}></div>
 
-                        {/* Project Icon Large */}
-                        <div className="relative z-10 flex flex-col items-center gap-3 text-center">
+                        {/* Fallback Icon if image fails */}
+                        <div className="relative z-10 flex flex-col items-center gap-3 text-center group-hover:opacity-0 transition-opacity">
                           <div 
                             className="w-24 h-24 rounded-3xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500"
                             style={{ backgroundColor: selectedIsland.color }}
                           >
                             <selectedIsland.icon size={48} />
                           </div>
-                          <span className="text-xs font-bold tracking-widest uppercase text-slate-500 px-4">{project.category}</span>
+                          <span className="text-xs font-bold tracking-widest uppercase text-white px-4">{project.category}</span>
                         </div>
                       </div>
 

@@ -60,11 +60,11 @@ export default function AboutSectionNew() {
                 </div>
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#A2D2FF]">
                   <span className="font-pixel text-3xl text-[#2C3E50]">30+</span>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Artifacts Made</span>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">CREATIVE PROJECTS</span>
                 </div>
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#D4A373]">
                   <span className="font-pixel text-3xl text-[#2C3E50]">∞</span>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Coffee Cups</span>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">IDEAS & DAYDREAMS</span>
                 </div>
               </div>
             </div>
