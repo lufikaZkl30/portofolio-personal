@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { 
   Code2, Video, Music, Droplets, Sparkles,
-  MonitorPlay, Waves
+  MonitorPlay, Waves, Cloud
 } from 'lucide-react';
 
 export default function SkillsSection() {
@@ -101,6 +101,25 @@ export default function SkillsSection() {
           transform: translateY(-5px) scale(1.02);
           box-shadow: 0 20px 40px rgba(0,0,0,0.08);
         }
+
+        /* Mist & Cloud Animations */
+        @keyframes float-mist {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+          50% { transform: translate(-15px, -20px) scale(1.1); opacity: 0.6; }
+        }
+        @keyframes drift-spray {
+          0% { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
+          20% { opacity: 0.7; }
+          80% { opacity: 0.7; }
+          100% { transform: translateY(-60px) translateX(30px) scale(1.2); opacity: 0; }
+        }
+        .mist-effect {
+          filter: blur(45px);
+          animation: float-mist 8s infinite alternate ease-in-out;
+        }
+        .spray-cloud {
+          animation: drift-spray 6s infinite linear;
+        }
       `}</style>
 
       {/* Background Decor */}
@@ -121,8 +140,24 @@ export default function SkillsSection() {
         {/* WATERFALL JOURNEY LAYOUT */}
         <div className="relative w-full flex flex-col items-center py-10">
           
+          {/* AMBIENT WATERFALL MIST / SPRAY (New Feature) */}
+          <div className="absolute top-[5%] left-1/2 -translate-x-[180px] md:-translate-x-[300px] w-64 h-64 bg-white/70 rounded-full mist-effect pointer-events-none z-0" />
+          <div className="absolute top-[45%] left-1/2 translate-x-[50px] md:translate-x-[150px] w-72 h-72 bg-[#E0F4FF]/60 rounded-full mist-effect pointer-events-none z-0" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-[2%] left-1/2 -translate-x-[120px] w-96 h-48 bg-white/80 rounded-full mist-effect pointer-events-none z-0" style={{ animationDelay: '4s' }} />
+          
+          {/* Floating Spray Clouds */}
+          <div className="absolute top-[18%] left-1/2 -translate-x-[90px] text-white/80 spray-cloud pointer-events-none z-10" style={{ animationDuration: '5s' }}>
+             <Cloud size={40} fill="currentColor" />
+          </div>
+          <div className="absolute top-[52%] left-1/2 translate-x-[50px] text-white/70 spray-cloud pointer-events-none z-10" style={{ animationDuration: '7s', animationDelay: '1.5s' }}>
+             <Cloud size={32} fill="currentColor" />
+          </div>
+          <div className="absolute bottom-[12%] left-1/2 -translate-x-[70px] text-white/90 spray-cloud pointer-events-none z-10" style={{ animationDuration: '6s', animationDelay: '3s' }}>
+             <Cloud size={48} fill="currentColor" />
+          </div>
+
           {/* THE WATERFALL STREAM (Central Line) */}
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-8 md:w-12 bg-gradient-to-b from-[#D4A373]/20 via-[#A2D2FF]/40 to-[#023047]/10 rounded-full border-x-2 border-white/50 overflow-hidden shadow-inner">
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-8 md:w-12 bg-gradient-to-b from-[#D4A373]/20 via-[#A2D2FF]/40 to-[#023047]/10 rounded-full border-x-2 border-white/50 overflow-hidden shadow-inner z-10">
             {/* Moving Water Particles */}
             {[...Array(6)].map((_, i) => (
               <div 
@@ -148,7 +183,7 @@ export default function SkillsSection() {
                 >
                   
                   {/* Left Side (Empty space or Card) */}
-                  <div className={`w-full md:w-5/12 flex ${isLeft ? 'justify-end' : 'justify-start md:justify-end order-3 md:order-1'} px-4 md:px-8`}>
+                  <div className={`w-full md:w-5/12 flex ${isLeft ? 'justify-center' : 'justify-start md:justify-end order-3 md:order-1'} px-4 md:px-8`}>
                     {isLeft && (
                       <div className={`w-full max-w-sm glass-card rounded-3xl p-6 relative interactive-hover transition-all duration-500 ${isHovered ? 'border-[#A2D2FF] ring-4 ring-[#A2D2FF]/20' : 'border-white/80'}`}>
                         <div className="flex items-center gap-3 mb-4">
@@ -211,20 +246,21 @@ export default function SkillsSection() {
                         )}
                       </div>
                       
-                      {/* Connection Line to Card (Desktop only) */}
+                      {/* Connection Line to Card (Desktop only) - Enhanced for neatness */}
                       <div 
-                        className={`hidden md:block absolute top-1/2 -translate-y-1/2 h-[2px] transition-all duration-500 z-0 ${isLeft ? 'right-1/2' : 'left-1/2'}`}
+                        className={`hidden md:block absolute top-1/2 -translate-y-1/2 h-[3px] transition-all duration-700 z-0 ${isLeft ? 'right-1/2 origin-right' : 'left-1/2 origin-left'}`}
                         style={{ 
-                          width: isHovered ? '100px' : '40px',
+                          width: isHovered ? '160px' : '80px',
                           backgroundColor: node.color,
-                          opacity: isHovered ? 1 : 0.3
+                          opacity: isHovered ? 1 : 0.3,
+                          boxShadow: isHovered ? `0 0 8px ${node.color}` : 'none'
                         }}
                       />
                     </div>
                   </div>
 
                   {/* Right Side (Empty space or Card) */}
-                  <div className={`w-full md:w-5/12 flex ${!isLeft ? 'justify-start' : 'justify-end md:justify-start order-3'} px-4 md:px-8`}>
+                  <div className={`w-full md:w-5/12 flex ${!isLeft ? 'justify-center' : 'justify-end md:justify-start order-3'} px-4 md:px-8`}>
                     {!isLeft && (
                       <div className={`w-full max-w-sm glass-card rounded-3xl p-6 relative interactive-hover transition-all duration-500 ${isHovered ? 'border-[#A3C9A8] ring-4 ring-[#A3C9A8]/20' : 'border-white/80'}`}>
                          <div className="flex items-center gap-3 mb-4">
