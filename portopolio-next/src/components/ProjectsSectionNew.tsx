@@ -257,48 +257,68 @@ export default function ProjectsSectionNew() {
                   {filteredProjects.length > 0 ? filteredProjects.map((project, idx) => (
                     <div 
                       key={project.id} 
-                      className="glass-card bg-white/70 p-8 flex flex-col group interactive-hover relative overflow-hidden border-2 border-transparent hover:border-slate-200 animate-fade-in-up"
+                      className="glass-card bg-white/70 flex flex-col group interactive-hover relative overflow-hidden border-2 border-transparent hover:border-slate-200 animate-fade-in-up"
                       style={{ animationDelay: `${idx * 0.1}s` }}
                     >
-                      {/* Decorative Background Blur */}
+                      {/* Project Preview Area */}
                       <div 
-                        className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-700"
-                        style={{ backgroundColor: selectedIsland.color }}
-                      ></div>
+                        className="w-full h-48 md:h-56 relative overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500 origin-top"
+                        style={{
+                          background: `linear-gradient(135deg, ${selectedIsland.color}20 0%, ${selectedIsland.color}40 100%)`,
+                          borderBottom: `2px solid ${selectedIsland.color}30`
+                        }}
+                      >
+                        {/* Animated Background Pattern */}
+                        <div className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity">
+                          <div className="absolute top-4 right-4 w-20 h-20 rounded-full" style={{ backgroundColor: selectedIsland.color, opacity: 0.3 }}></div>
+                          <div className="absolute bottom-8 left-8 w-32 h-32 rounded-full" style={{ backgroundColor: selectedIsland.color, opacity: 0.2 }}></div>
+                          <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-lg transform rotate-45" style={{ backgroundColor: selectedIsland.color, opacity: 0.25 }}></div>
+                        </div>
 
-                      <div className="flex justify-between items-start mb-6 relative z-10">
+                        {/* Project Icon Large */}
+                        <div className="relative z-10 flex flex-col items-center gap-3 text-center">
+                          <div 
+                            className="w-24 h-24 rounded-3xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500"
+                            style={{ backgroundColor: selectedIsland.color }}
+                          >
+                            <project.icon size={48} />
+                          </div>
+                          <span className="text-xs font-bold tracking-widest uppercase text-slate-500 px-4">{project.category}</span>
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-8 flex flex-col flex-grow relative z-10">
+                        {/* Decorative Background Blur */}
                         <div 
-                          className="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 border-4 border-white"
+                          className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-700"
                           style={{ backgroundColor: selectedIsland.color }}
-                        >
-                          <project.icon size={28} />
-                        </div>
-                        <div className="px-4 py-1.5 rounded-xl bg-white border border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-widest shadow-sm">
-                          {project.category} Artifact
-                        </div>
-                      </div>
-                      
-                      <div className="relative z-10 flex-grow">
-                        <h3 className="font-pixel text-3xl text-[#2C3E50] mb-4 group-hover:text-slate-800 transition-colors">{project.title}</h3>
-                        <p className="text-slate-600 mb-8 text-lg leading-relaxed font-medium">
-                          {project.desc}
-                        </p>
-                      </div>
+                        ></div>
 
-                      <div className="mt-auto relative z-10 pt-6 flex items-center justify-between border-t border-slate-200/50">
-                        <div className="flex flex-wrap gap-2">
-                          {project.tech.map((t, i) => (
-                            <span key={i} className="text-xs font-bold tracking-wide px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg shadow-inner">
-                              {t}
-                            </span>
-                          ))}
+                        <div className="flex justify-between items-start mb-6 relative z-10">
+                          <div className="flex-1">
+                            <h3 className="font-pixel text-3xl text-[#2C3E50] mb-4 group-hover:text-slate-800 transition-colors">{project.title}</h3>
+                            <p className="text-slate-600 text-lg leading-relaxed font-medium mb-6">
+                              {project.desc}
+                            </p>
+                          </div>
                         </div>
-                        <button 
-                          className="w-12 h-12 rounded-full text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md hover:shadow-xl flex-shrink-0"
-                          style={{ backgroundColor: selectedIsland.color }}
-                        >
-                          <ArrowUpRight size={22} className="text-slate-800" />
-                        </button>
+
+                        <div className="mt-auto relative z-10 pt-6 flex items-center justify-between border-t border-slate-200/50">
+                          <div className="flex flex-wrap gap-2">
+                            {project.tech.map((t, i) => (
+                              <span key={i} className="text-xs font-bold tracking-wide px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg shadow-inner">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                          <button 
+                            className="w-12 h-12 rounded-full text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md hover:shadow-xl flex-shrink-0"
+                            style={{ backgroundColor: selectedIsland.color }}
+                          >
+                            <ArrowUpRight size={22} className="text-slate-800" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )) : (

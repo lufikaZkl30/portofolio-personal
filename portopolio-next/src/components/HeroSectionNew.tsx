@@ -22,8 +22,8 @@ export default function HeroSectionNew() {
         {/* 🌸 GIF DECORATION BOTTOM LEFT */}
         <div className="absolute bottom-0 left-0 w-52 md:w-72 opacity-60 pointer-events-none z-0 animate-float-slow">
           <img
-            src="/assets/gif/cat.gif"
-            alt="cat gif"
+            src="/assets/gif/pokemon.gif"
+            alt="pokemon gif"
             className="w-full h-full object-contain"
           />
         </div>
