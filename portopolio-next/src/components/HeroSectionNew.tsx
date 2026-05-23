@@ -12,7 +12,7 @@ export default function HeroSectionNew() {
         {/* Animated GIF - Top Right Decoration */}
         <div className="absolute top-20 right-5 md:right-20 w-64 h-64 md:w-80 md:h-80 opacity-20 pointer-events-none z-0">
           <Image 
-            src="/hero-animation.gif" 
+            src="/assets/gif/zelda.gif" 
             alt="Hero Animation"
             width={320}
             height={320}
@@ -25,7 +25,7 @@ export default function HeroSectionNew() {
         {/* Animated GIF - Bottom Left Decoration */}
         <div className="absolute bottom-0 left-0 w-56 h-56 md:w-72 md:h-72 opacity-15 pointer-events-none z-0">
           <Image 
-            src="/hero-animation.gif" 
+            src="/assets/gif/pokemon.gif"
             alt="Hero Animation"
             width={288}
             height={288}
