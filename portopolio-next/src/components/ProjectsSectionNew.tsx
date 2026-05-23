@@ -346,7 +346,13 @@ export default function ProjectsSectionNew() {
                             ))}
                           </div>
                           <button 
-                            className="w-12 h-12 rounded-full text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md hover:shadow-xl flex-shrink-0"
+                            onClick={() => {
+                              const url = (project as any).github || (project as any).bandLab || (project as any).Youtube || (project as any).demo;
+                              if (url && url !== "#") {
+                                window.open(url, "_blank");
+                              }
+                            }}
+                            className="w-12 h-12 rounded-full text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md hover:shadow-xl flex-shrink-0 cursor-pointer"
                             style={{ backgroundColor: selectedIsland.color }}
                           >
                             <ArrowUpRight size={22} className="text-slate-800" />

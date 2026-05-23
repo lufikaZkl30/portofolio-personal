@@ -41,6 +41,7 @@ export default function SkillsSection() {
       icon: Music,
       color: '#D4A373',
       align: 'left',
+      startYear: 2019,
       desc: 'A wellspring of inspiration where I craft melodies, harmonies, and ambient soundscapes.',
       skills: ['Ableton Live', 'Synthesizers', 'Mixing & Mastering', 'Foley & Sound Design']
     },
@@ -51,6 +52,7 @@ export default function SkillsSection() {
       icon: Code2,
       color: '#A3C9A8',
       align: 'right',
+      startYear: 2022,
       desc: 'A rushing stream where logic and design flow into an interactive experience.',
       skills: ['React & Next.js', 'Tailwind CSS', 'JavaScript (ES6+)', 'Framer Motion']
     },
@@ -61,6 +63,7 @@ export default function SkillsSection() {
       icon: Video,
       color: '#A2D2FF',
       align: 'left',
+      startYear: 2025,
       desc: 'The mouth where sound and interaction are united into a cinematic masterpiece.',
       skills: ['Premiere Pro', 'After Effects', 'Color Grading', 'Motion Graphics']
     }
@@ -347,7 +350,7 @@ export default function SkillsSection() {
 
                   {/* LEFT */}
                   <div className="flex justify-end">
-                    {isLeft && (
+                    {isLeft ? (
                       <div className="glass-card rounded-[2rem] p-7 max-w-sm w-full">
 
                         <div className="flex items-center gap-4 mb-5">
@@ -388,6 +391,23 @@ export default function SkillsSection() {
                               {skill}
                             </span>
                           ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transition-opacity">
+                        <div
+                          className="px-6 py-4 rounded-2xl text-white text-center shadow-lg"
+                          style={{
+                            backgroundColor: `${node.color}30`,
+                            borderLeft: `4px solid ${node.color}`,
+                          }}
+                        >
+                          <p className="font-pixel text-2xl font-bold" style={{ color: node.color }}>
+                            {(node as any).startYear}
+                          </p>
+                          <p className="text-xs uppercase tracking-widest text-slate-500 font-bold mt-1">
+                            - NOW
+                          </p>
                         </div>
                       </div>
                     )}
@@ -422,8 +442,8 @@ export default function SkillsSection() {
                   </div>
 
                   {/* RIGHT */}
-                  <div className="flex justify-start">
-                    {!isLeft && (
+                  <div className="flex flex-col justify-center items-start">
+                    {!isLeft ? (
                       <div className="glass-card rounded-[2rem] p-7 max-w-sm w-full">
 
                         <div className="flex items-center gap-4 mb-5">
@@ -466,6 +486,23 @@ export default function SkillsSection() {
                           ))}
                         </div>
                       </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-3 opacity-80 hover:opacity-100 transition-opacity">
+                        <div
+                          className="px-6 py-4 rounded-2xl text-white text-center shadow-lg"
+                          style={{
+                            backgroundColor: `${node.color}30`,
+                            borderLeft: `4px solid ${node.color}`,
+                          }}
+                        >
+                          <p className="font-pixel text-2xl font-bold" style={{ color: node.color }}>
+                            {(node as any).startYear}
+                          </p>
+                          <p className="text-xs uppercase tracking-widest text-slate-500 font-bold mt-1">
+                            - NOW
+                          </p>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -498,13 +535,22 @@ export default function SkillsSection() {
                         <node.icon size={22} />
                       </div>
 
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-pixel text-2xl text-[#2C3E50]">
                           {node.title}
                         </h3>
 
                         <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">
                           {node.subtitle}
+                        </p>
+                      </div>
+
+                      <div className="flex-shrink-0 text-center">
+                        <p className="font-pixel text-2xl font-bold" style={{ color: node.color }}>
+                          {(node as any).startYear}
+                        </p>
+                        <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">
+                          - NOW
                         </p>
                       </div>
                     </div>
