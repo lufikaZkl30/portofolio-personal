@@ -54,7 +54,7 @@ export default function ContactSectionNew() {
         </div>
 
         <p className="mt-12 text-sm text-slate-400 font-medium tracking-widest uppercase">
-          Crafted with care © {new Date().getFullYear()}
+          Crafted with care BY LUVI ASAKURA © {new Date().getFullYear()}
         </p>
       </div>
     </section>
