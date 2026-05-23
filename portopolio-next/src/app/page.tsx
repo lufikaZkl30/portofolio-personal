@@ -1,37 +1,56 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import AboutSection from "@/components/AboutSection";
-import SkillsSection from "@/components/SkillsSection";
-import ProjectsSection from "@/components/ProjectsSection";
-import ExperienceSection from "@/components/ExperienceSection";
-import ContactFooter from "@/components/ContactFooter";
+import Navigation from "@/components/Navigation";
+import AmbientEnvironment from "@/components/AmbientEnvironment";
+import HeroSectionNew from "@/components/HeroSectionNew";
+import AboutSectionNew from "@/components/AboutSectionNew";
+import SkillsSectionNew from "@/components/SkillsSectionNew";
+import ProjectsSectionNew from "@/components/ProjectsSectionNew";
+import ContactSectionNew from "@/components/ContactSectionNew";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
+  // Simple scroll spy to update active navigation item
   useEffect(() => {
     setMounted(true);
+    
+    const handleScroll = () => {
+      const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
+      const scrollPosition = window.scrollY + 200;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (!mounted) return null; // Prevent hydration errors
+  if (!mounted) return null;
 
   return (
-    <main className="min-h-screen flex flex-col relative">
-      <Navbar />
+    <div className="relative min-h-screen font-sans antialiased selection:bg-[#A3C9A8] selection:text-white">
+      <AmbientEnvironment />
+      <Navigation activeSection={activeSection} />
       
-      <div className="max-w-7xl mx-auto px-6 w-full space-y-32 pb-32">
-        <HeroSection />
-        <AboutSection />
-        <SkillsSection />
-        <ProjectsSection />
-        <ExperienceSection />
-      </div>
-      
-      <ContactFooter />
-    </main>
+      <main className="relative">
+        <HeroSectionNew />
+        <AboutSectionNew />
+        <SkillsSectionNew />
+        <ProjectsSectionNew />
+        <ContactSectionNew />
+      </main>
+    </div>
   );
 }

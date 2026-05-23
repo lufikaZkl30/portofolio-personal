@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Press_Start_2P } from "next/font/google";
+import { Inter, Press_Start_2P, Space_Grotesk, VT323 } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -7,6 +7,16 @@ const pressStart2P = Press_Start_2P({
   weight: "400", 
   subsets: ["latin"],
   variable: "--font-press-start" 
+});
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "600", "700"]
+});
+const vt323 = VT323({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-vt323"
 });
 
 export const metadata: Metadata = {
@@ -21,12 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${inter.variable} ${pressStart2P.variable} font-sans bg-[#050816] text-white overflow-x-hidden relative`} suppressHydrationWarning>
-        {/* Global Background Elements */}
-        <div className="fixed inset-0 -z-50 bg-cyber-grid pointer-events-none"></div>
-        <div className="fixed top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-primary/10 blur-[100px] -z-40 pointer-events-none"></div>
-        <div className="fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-secondary/10 blur-[100px] -z-40 pointer-events-none"></div>
-        
+      <body className={`${inter.variable} ${pressStart2P.variable} ${spaceGrotesk.variable} ${vt323.variable} font-sans bg-[#FDFBF7] text-[#2C3E50] overflow-x-hidden relative cursor-crosshair`} suppressHydrationWarning>
         {children}
       </body>
     </html>
