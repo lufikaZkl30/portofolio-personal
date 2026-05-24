@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   title: "Lufika Ayu Fatimah |  Portfolio - Personal Website",
   description: "UI/UX Designer & Front-End Developer & AI Developer Portfolio",
   icons: {
-    icon: "public/images/icon-web.jpeg",
+    icon: "/img/icon-web.jpeg",
   },
 };
 

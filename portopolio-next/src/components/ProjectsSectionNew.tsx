@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 // import { motion } from "framer-motion";
-import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight } from "lucide-react";
+import { Code2, Video, Music, Cloud, Trees, Tent, MapIcon, Star, ArrowUpRight, Github, Play } from "lucide-react";
 
 interface Island {
   id: string;
@@ -289,86 +289,109 @@ export default function ProjectsSectionNew() {
                   </div>
                 </div>
 
-                {/* Filtered Artifacts Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10 flex-grow">
-                  {filteredProjects.length > 0 ? filteredProjects.map((project, idx) => (
-                    <div 
-                      key={project.id} 
-                      className="glass-card bg-white/70 flex flex-col group interactive-hover relative overflow-hidden border-2 border-transparent hover:border-slate-200 animate-fade-in-up"
-                      style={{ animationDelay: `${idx * 0.1}s` }}
-                    >
-                      {/* Project Preview Area */}
-                      <div 
-                        className="w-full h-48 md:h-56 relative overflow-hidden flex items-center justify-center bg-cover bg-center"
-                        style={{
-                          backgroundImage: `url('${project.img}')`,
-                          borderBottom: `2px solid ${selectedIsland.color}30`
-                        }}
-                      >
-                        {/* Overlay Gradient */}
-                        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${selectedIsland.color}40 0%, ${selectedIsland.color}60 100%)` }}></div>
-
-                        {/* Fallback Icon if image fails */}
-                        <div className="relative z-10 flex flex-col items-center gap-3 text-center group-hover:opacity-0 transition-opacity">
-                          <div 
-                            className="w-24 h-24 rounded-3xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500"
-                            style={{ backgroundColor: selectedIsland.color }}
-                          >
-                            <selectedIsland.icon size={48} />
-                          </div>
-                          <span className="text-xs font-bold tracking-widest uppercase text-white px-4">{project.category}</span>
-                        </div>
-                      </div>
-
-                      {/* Content Section */}
-                      <div className="p-8 flex flex-col flex-grow relative z-10">
-                        {/* Decorative Background Blur */}
+                {/* Filtered Artifacts Grid - Horizontal Scrollable */}
+                <div className="relative z-10 flex-grow flex flex-col">
+                  <div className="overflow-x-auto custom-scrollbar pb-4">
+                    <div className="flex gap-6 min-w-full px-6">
+                      {filteredProjects.length > 0 ? filteredProjects.map((project, idx) => (
                         <div 
-                          className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-700"
-                          style={{ backgroundColor: selectedIsland.color }}
-                        ></div>
-
-                        <div className="flex justify-between items-start mb-6 relative z-10">
-                          <div className="flex-1">
-                            <h3 className="font-pixel text-3xl text-[#2C3E50] mb-4 group-hover:text-slate-800 transition-colors">{project.title}</h3>
-                            <p className="text-slate-600 text-lg leading-relaxed font-medium mb-6">
-                              {project.desc}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="mt-auto relative z-10 pt-6 flex items-center justify-between border-t border-slate-200/50">
-                          <div className="flex flex-wrap gap-2">
-                            {project.tech.map((t, i) => (
-                              <span key={i} className="text-xs font-bold tracking-wide px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg shadow-inner">
-                                {t}
-                              </span>
-                            ))}
-                          </div>
-                          <button 
-                            onClick={() => {
-                              const url = (project as any).github || (project as any).bandLab || (project as any).Youtube || (project as any).demo;
-                              if (url && url !== "#") {
-                                window.open(url, "_blank");
-                              }
+                          key={project.id} 
+                          className="flex-shrink-0 w-80 glass-card bg-white/70 flex flex-col group interactive-hover relative overflow-hidden border-2 border-transparent hover:border-slate-200 animate-fade-in-up"
+                          style={{ animationDelay: `${idx * 0.1}s` }}
+                        >
+                          {/* Project Preview Area */}
+                          <div 
+                            className="w-full h-40 relative overflow-hidden flex items-center justify-center bg-cover bg-center"
+                            style={{
+                              backgroundImage: `url('${project.img}')`,
+                              borderBottom: `2px solid ${selectedIsland.color}30`
                             }}
-                            className="w-12 h-12 rounded-full text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md hover:shadow-xl flex-shrink-0 cursor-pointer"
-                            style={{ backgroundColor: selectedIsland.color }}
                           >
-                            <ArrowUpRight size={22} className="text-slate-800" />
-                          </button>
+                            {/* Overlay Gradient */}
+                            <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${selectedIsland.color}40 0%, ${selectedIsland.color}60 100%)` }}></div>
+
+                            {/* Fallback Icon if image fails */}
+                            <div className="relative z-10 flex flex-col items-center gap-2 text-center group-hover:opacity-0 transition-opacity">
+                              <div 
+                                className="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500"
+                                style={{ backgroundColor: selectedIsland.color }}
+                              >
+                                <selectedIsland.icon size={32} />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Content Section */}
+                          <div className="p-5 flex flex-col flex-grow relative z-10">
+                            {/* Decorative Background Blur */}
+                            <div 
+                              className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+                              style={{ backgroundColor: selectedIsland.color }}
+                            ></div>
+
+                            <div className="relative z-10 mb-3">
+                              <h3 className="font-pixel text-lg text-[#2C3E50] mb-2 group-hover:text-slate-800 transition-colors line-clamp-2">{project.title}</h3>
+                              <p className="text-slate-600 text-xs leading-relaxed font-medium line-clamp-3">
+                                {project.desc}
+                              </p>
+                            </div>
+
+                            <div className="mt-auto relative z-10 pt-4">
+                              <div className="flex flex-wrap gap-1.5 mb-4">
+                                {project.tech.slice(0, 3).map((t, i) => (
+                                  <span key={i} className="text-[10px] font-bold tracking-wide px-2 py-1 bg-slate-100 text-slate-600 rounded-md shadow-inner">
+                                    {t}
+                                  </span>
+                                ))}
+                                {project.tech.length > 3 && (
+                                  <span className="text-[10px] font-bold tracking-wide px-2 py-1 bg-slate-100 text-slate-600 rounded-md shadow-inner">
+                                    +{project.tech.length - 3}
+                                  </span>
+                                )}
+                              </div>
+                              
+                              {/* Action Buttons */}
+                              <div className="flex items-center gap-2">
+                                {/* GitHub Button */}
+                                {(project as any).github && (
+                                  <button 
+                                    onClick={() => window.open((project as any).github, "_blank")}
+                                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition-all duration-300 hover:scale-105 text-xs font-bold"
+                                  >
+                                    <Github size={14} />
+                                    <span>GitHub</span>
+                                  </button>
+                                )}
+                                
+                                {/* Demo/Link Button */}
+                                {((project as any).demo && (project as any).demo !== "#") || (project as any).bandLab || (project as any).Youtube ? (
+                                  <button 
+                                    onClick={() => {
+                                      const url = (project as any).demo || (project as any).bandLab || (project as any).Youtube;
+                                      if (url && url !== "#") window.open(url, "_blank");
+                                    }}
+                                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white transition-all duration-300 hover:scale-105 text-xs font-bold"
+                                    style={{ backgroundColor: selectedIsland.color }}
+                                  >
+                                    <Play size={14} />
+                                    <span>View</span>
+                                  </button>
+                                ) : null}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )) : (
+                        <div className="w-full flex flex-col items-center justify-center py-20 text-center text-slate-400">
+                          <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+                            <Trees size={40} className="opacity-40" />
+                          </div>
+                          <h4 className="font-pixel text-2xl text-slate-500 mb-2">Uncharted Territory</h4>
+                          <p className="font-medium">No artifacts discovered in this region yet. Check back soon!</p>
+                        </div>
+                      )}
                     </div>
-                  )) : (
-                    <div className="col-span-full flex flex-col items-center justify-center py-20 text-center text-slate-400">
-                      <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
-                        <Trees size={40} className="opacity-40" />
-                      </div>
-                      <h4 className="font-pixel text-2xl text-slate-500 mb-2">Uncharted Territory</h4>
-                      <p className="font-medium">No artifacts discovered in this region yet. Check back soon!</p>
-                    </div>
-                  )}
+                  </div>
                 </div>
 
               </div>
