@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Code2, Music, Video, Github, Play, Sparkles } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Code2, Music, Video, Github, ExternalLink, ChevronLeft, Star, Sparkles, Play } from "lucide-react";
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
 interface Project {
   id: number;
@@ -10,988 +12,618 @@ interface Project {
   desc: string;
   tech: string[];
   color: string;
-  img: string;
-  demo?: string;
   github?: string;
+  demo?: string;
   bandLab?: string;
-  Youtube?: string;
+  youtube?: string;
 }
 
-const projects: Project[] = [
+const PROJECTS: Project[] = [
   {
-    id: 1,
-    title: "ClassTeams-Info",
-    category: "code",
-    desc: "The website used to promote Teams classes uses Next.js and Tailwind CSS.",
+    id: 1, title: "ClassTeams-Info", category: "code",
+    desc: "Website to promote Teams classes built with Next.js and Supabase.",
     tech: ["Next.js", "Tailwind CSS", "Supabase"],
     color: "#A3C9A8",
-    img: "/assets/images/project-1.png",
-    demo: "#",
-    github: "https://github.com/lufikaZkl30/classteams-info",
+    github: "https://github.com/lufikaZkl30/classteams-info", demo: "#",
   },
   {
-    id: 2,
-    title: "YT Emotion Analyzer",
-    category: "code",
-    desc: "A website for analyzing YouTube comments using the Google API and Chart.js.",
+    id: 2, title: "YT Emotion Analyzer", category: "code",
+    desc: "Analyzes YouTube comments using Google API and Chart.js.",
     tech: ["HTML", "Tailwind CSS", "JavaScript", "Python"],
-    color: "#A2D2FF",
-    img: "/assets/images/project-2.png",
-    demo: "#",
-    github: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
+    color: "#A3C9A8",
+    github: "https://github.com/lufikaZkl30/yt-emotion-analyzer", demo: "#",
   },
   {
-    id: 3,
-    title: "MindEase Bot AI",
-    category: "code",
+    id: 3, title: "MindEase Bot AI", category: "code",
     desc: "AI chatbot for helping users manage stress and relaxation.",
     tech: ["Node.js", "JavaScript", "Gemini API"],
-    color: "#FDE2E4",
-    img: "/assets/images/project-3.png",
-    demo: "#",
-    github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real",
+    color: "#A3C9A8",
+    github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real", demo: "#",
   },
   {
-    id: 4,
-    title: "Loser In You (Prod.Lotus)",
-    category: "music",
-    desc: ""Loser In You" is a song about the loss of a once-close friendship. It tells of memories that are hard to forget and feelings that linger to this day.",
+    id: 4, title: "Loser In You (Prod. Lotus)", category: "music",
+    desc: "A song about the loss of a once-close friendship — lingering memories and feelings.",
     tech: ["BandLab", "R&B & Soul", "Mixing", "Collaboration"],
     color: "#89C2D9",
-    img: "/assets/images/music-1.png",
     bandLab: "https://www.bandlab.com/post/d733931e-5776-49c3-9cd6-d1dcdfd835f1",
   },
   {
-    id: 7,
-    title: "Anime Velocity Edit",
-    category: "edit",
-    desc: "Cinematic anime edit dengan transisi cepat dan efek velocity smooth.",
+    id: 7, title: "Anime Velocity Edit", category: "edit",
+    desc: "Cinematic anime edit with fast transitions and smooth velocity effects.",
     tech: ["After Effects", "AMV", "Velocity"],
     color: "#FFAFCC",
-    img: "/assets/images/edit-1.png",
-    Youtube: "#",
+    youtube: "#",
   },
 ];
 
-const categoryConfig = {
-  code: {
+const ISLANDS = [
+  {
+    id: "code" as const,
     name: "Web Dev Village",
+    tagline: "Where code meets magic",
     icon: Code2,
     color: "#A3C9A8",
-    particleType: "leaf",
+    dark: "#5A8C60",
+    glow: "rgba(163,201,168,0.4)",
+    particle: "⌨️",
+    symbols: ["</>", "{}", "//", "=>", "[]"],
+    // positioned: left area
+    x: 18, y: 32,
+    size: 230,
+    shape: "40% 60% 55% 45% / 45% 40% 60% 55%",
   },
-  music: {
+  {
+    id: "music" as const,
     name: "Music Lake",
+    tagline: "Sounds from the deep",
     icon: Music,
     color: "#89C2D9",
-    particleType: "ripple",
+    dark: "#4A8CAD",
+    glow: "rgba(137,194,217,0.4)",
+    particle: "🎵",
+    symbols: ["♪", "♫", "~", "◉", "♬"],
+    // positioned: right area
+    x: 62, y: 18,
+    size: 195,
+    shape: "50% 50% 60% 40% / 40% 55% 45% 60%",
   },
-  edit: {
+  {
+    id: "edit" as const,
     name: "Creative Studio",
+    tagline: "Frames of imagination",
     icon: Video,
     color: "#FFAFCC",
-    particleType: "sparkle",
+    dark: "#C96E94",
+    glow: "rgba(255,175,204,0.4)",
+    particle: "✨",
+    symbols: ["▶", "◼", "◀◀", "▶▶", "⬛"],
+    // positioned: center
+    x: 40, y: 44,
+    size: 210,
+    shape: "60% 40% 45% 55% / 55% 60% 40% 45%",
   },
-};
+];
 
-// SVG Rope component connecting anchor to card
-function RopeLine({
-  id,
-  startX,
-  startY,
-  endX,
-  endY,
-}: {
-  id: string;
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
-}) {
-  const controlX = (startX + endX) / 2 + (Math.random() - 0.5) * 40;
-  const controlY = startY + Math.abs(endY - startY) * 0.4;
+// ─── Sub-components ────────────────────────────────────────────────────────────
 
+function FloatingSymbol({ sym, delay, color }: { sym: string; delay: number; color: string }) {
   return (
-    <svg
-      key={id}
-      className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible"
-      style={{ zIndex: 1 }}
+    <span
+      className="absolute text-xs font-mono font-bold pointer-events-none select-none"
+      style={{
+        color,
+        opacity: 0.6,
+        left: `${15 + Math.random() * 70}%`,
+        top: `${15 + Math.random() * 70}%`,
+        animation: `floatSym ${3 + Math.random() * 3}s ease-in-out infinite`,
+        animationDelay: `${delay}s`,
+      }}
     >
-      <defs>
-        <linearGradient
-          id={`rope-${id}`}
-          x1="0%"
-          y1="0%"
-          x2="0%"
-          y2="100%"
-        >
-          <stop offset="0%" stopColor="rgba(200,180,150,0.4)" />
-          <stop offset="100%" stopColor="rgba(200,180,150,0.2)" />
-        </linearGradient>
-      </defs>
-      <path
-        d={`M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`}
-        stroke={`url(#rope-${id})`}
-        strokeWidth="3"
-        fill="none"
-        strokeLinecap="round"
-        className="rope-sway"
-      />
-    </svg>
+      {sym}
+    </span>
   );
 }
 
-// Floating Particle component
-function FloatingParticle({
-  id,
-  type,
-  delay,
-}: {
-  id: string;
-  type: "leaf" | "sparkle" | "ripple";
-  delay: number;
-}) {
-  if (type === "leaf") {
-    return (
+function Particle({ x, y, color, delay }: { x: number; y: number; color: string; delay: number }) {
+  return (
+    <div
+      className="absolute w-1.5 h-1.5 rounded-full pointer-events-none"
+      style={{
+        left: `${x}%`, top: `${y}%`,
+        backgroundColor: color,
+        boxShadow: `0 0 6px ${color}`,
+        animation: `particleDrift ${4 + Math.random() * 4}s ease-in-out infinite`,
+        animationDelay: `${delay}s`,
+        opacity: 0.7,
+      }}
+    />
+  );
+}
+
+function IslandCard({ island, onClick }: { island: typeof ISLANDS[0]; onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+  const Icon = island.icon;
+
+  return (
+    <div
+      className="absolute cursor-pointer select-none group"
+      style={{ left: `${island.x}%`, top: `${island.y}%`, zIndex: hovered ? 20 : 10 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={onClick}
+    >
+      {/* Glow ring */}
       <div
-        key={id}
-        className="absolute animate-drift pointer-events-none floating-leaf"
+        className="absolute inset-0 rounded-full pointer-events-none transition-all duration-700"
         style={{
-          animationDelay: `${delay}s`,
-          left: Math.random() * 100 + "%",
-          top: Math.random() * 100 + "%",
-          opacity: 0.3,
+          background: `radial-gradient(circle, ${island.glow} 0%, transparent 70%)`,
+          transform: hovered ? "scale(1.4)" : "scale(1.1)",
+          filter: "blur(20px)",
+          zIndex: -1,
+        }}
+      />
+
+      {/* Water shadow / reflection under island */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: -18,
+          left: "10%",
+          width: "80%",
+          height: 28,
+          background: `radial-gradient(ellipse, ${island.color}55 0%, transparent 75%)`,
+          filter: "blur(10px)",
+          transform: hovered ? "scaleX(1.15)" : "scaleX(1)",
+          transition: "transform 0.5s ease",
+        }}
+      />
+
+      {/* Island body */}
+      <div
+        className="relative flex flex-col items-center justify-center transition-all duration-500"
+        style={{
+          width: island.size,
+          height: island.size,
+          background: `
+            radial-gradient(ellipse at 50% 30%, #f5f0e8 0%, ${island.color}cc 35%, ${island.color} 60%, ${island.dark}99 100%)
+          `,
+          borderRadius: island.shape,
+          boxShadow: hovered
+            ? `0 28px 56px rgba(0,0,0,0.22), 0 8px 24px ${island.glow}, inset -6px -10px 0 rgba(0,0,0,0.07), inset 0 6px 12px rgba(255,255,255,0.4)`
+            : `0 16px 36px rgba(0,0,0,0.16), inset -5px -8px 0 rgba(0,0,0,0.05), inset 0 4px 10px rgba(255,255,255,0.35)`,
+          transform: hovered ? "translateY(-16px) scale(1.04)" : "translateY(0) scale(1)",
+          border: "3px solid rgba(255,255,255,0.6)",
+          animation: `islandFloat ${5 + Math.random() * 3}s ease-in-out infinite`,
+          animationDelay: `${Math.random() * 2}s`,
         }}
       >
-        <div className="text-3xl">🍂</div>
+        {/* Sandy beach ring around the bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none rounded-b-[inherit]"
+          style={{
+            background: `linear-gradient(to bottom, transparent, ${island.color}88 60%, ${island.dark}66 100%)`,
+          }}
+        />
+
+        {/* Floating symbols inside island */}
+        {island.symbols.map((s, i) => (
+          <FloatingSymbol key={i} sym={s} delay={i * 0.4} color="rgba(255,255,255,0.75)" />
+        ))}
+
+        {/* Icon plate */}
+        <div
+          className="relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center mb-3 shadow-lg transition-transform duration-500"
+          style={{
+            background: "rgba(255,255,255,0.92)",
+            transform: hovered ? "scale(1.15) translateY(-4px)" : "scale(1)",
+            boxShadow: `0 8px 20px ${island.glow}`,
+          }}
+        >
+          <Icon size={30} style={{ color: island.dark }} />
+          {hovered && (
+            <div className="absolute inset-0 rounded-2xl animate-ping" style={{ background: `${island.color}40` }} />
+          )}
+        </div>
+
+        {/* Island name */}
+        <div
+          className="relative z-10 px-4 py-2 rounded-xl text-center transition-transform duration-300"
+          style={{
+            background: "rgba(255,255,255,0.9)",
+            backdropFilter: "blur(8px)",
+            transform: hovered ? "scale(1.08)" : "scale(1)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+          }}
+        >
+          <p className="font-pixel text-xs text-slate-700 leading-tight">{island.name}</p>
+          <p className="text-[10px] text-slate-500 mt-0.5">{island.tagline}</p>
+        </div>
+
+        {/* Click hint */}
+        {hovered && (
+          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[11px] font-bold text-slate-500 animate-bounce">
+            ✦ Click to explore ✦
+          </div>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
-  if (type === "sparkle") {
-    return (
+function ProjectCard({ project, accentColor }: { project: Project; accentColor: string }) {
+  return (
+    <div
+      className="flex-shrink-0 w-72 rounded-2xl overflow-hidden group transition-all duration-300 hover:-translate-y-2"
+      style={{
+        background: "rgba(255,255,255,0.78)",
+        backdropFilter: "blur(16px)",
+        border: `1.5px solid ${accentColor}40`,
+        boxShadow: `0 8px 32px rgba(0,0,0,0.08), 0 0 0 0 ${accentColor}`,
+      }}
+    >
+      {/* Color banner */}
       <div
-        key={id}
-        className="absolute animate-sparkle pointer-events-none"
-        style={{
-          animationDelay: `${delay}s`,
-          left: Math.random() * 100 + "%",
-          top: Math.random() * 100 + "%",
-          width: "8px",
-          height: "8px",
-          background: "radial-gradient(circle, #FFD700 0%, #FFAF00 100%)",
-          borderRadius: "50%",
-          boxShadow: "0 0 12px #FFD700",
-        }}
+        className="w-full h-2"
+        style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}88)` }}
       />
-    );
-  }
 
-  return (
-    <div
-      key={id}
-      className="absolute animate-ripple pointer-events-none"
-      style={{
-        animationDelay: `${delay}s`,
-        left: Math.random() * 100 + "%",
-        top: Math.random() * 100 + "%",
-        width: "20px",
-        height: "20px",
-        border: "2px solid #89C2D9",
-        borderRadius: "50%",
-        opacity: 0.4,
-      }}
-    />
+      <div className="p-5">
+        <h4 className="font-pixel text-sm text-slate-800 mb-2 leading-snug">{project.title}</h4>
+        <p className="text-xs text-slate-500 leading-relaxed mb-4">{project.desc}</p>
+
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {project.tech.map((t) => (
+            <span
+              key={t}
+              className="text-[10px] px-2 py-0.5 rounded-full font-semibold text-white"
+              style={{ backgroundColor: accentColor }}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-2">
+          {project.github && (
+            <a
+              href={project.github} target="_blank" rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white bg-slate-800 hover:bg-slate-900 transition-colors"
+            >
+              <Github size={12} /> GitHub
+            </a>
+          )}
+          {project.bandLab && (
+            <a
+              href={project.bandLab} target="_blank" rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white transition-colors"
+              style={{ backgroundColor: accentColor }}
+            >
+              <Play size={12} /> Listen
+            </a>
+          )}
+          {project.youtube && project.youtube !== "#" && (
+            <a
+              href={project.youtube} target="_blank" rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white transition-colors"
+              style={{ backgroundColor: accentColor }}
+            >
+              <ExternalLink size={12} /> Watch
+            </a>
+          )}
+          {project.demo && project.demo !== "#" && (
+            <a
+              href={project.demo} target="_blank" rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white transition-colors"
+              style={{ backgroundColor: accentColor }}
+            >
+              <ExternalLink size={12} /> Demo
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
-// Push Pin decoration
-function PushPin({ color }: { color: string }) {
-  return (
-    <div
-      className="absolute w-4 h-4 rounded-full shadow-lg"
-      style={{
-        backgroundColor: color,
-        top: "-8px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        boxShadow: `0 2px 8px rgba(0,0,0,0.3), inset -2px -2px 4px rgba(0,0,0,0.2)`,
-        border: "2px solid rgba(255,255,255,0.6)",
-      }}
-    />
-  );
-}
-
-// Tape corner decoration
-function TapeCorner({
-  position,
-}: {
-  position: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-}) {
-  const positions = {
-    "top-left": "top-0 left-0",
-    "top-right": "top-0 right-0",
-    "bottom-left": "bottom-0 left-0",
-    "bottom-right": "bottom-0 right-0",
-  };
-
-  return (
-    <div
-      className={`absolute w-6 h-6 ${positions[position]} pointer-events-none`}
-      style={{
-        background: "linear-gradient(135deg, rgba(255,222,89,0.5), rgba(255,222,89,0.3))",
-        transform: position.includes("top-left")
-          ? "rotate(0deg)"
-          : position.includes("top-right")
-            ? "rotate(90deg)"
-            : position.includes("bottom-left")
-              ? "rotate(270deg)"
-              : "rotate(180deg)",
-      }}
-    />
-  );
-}
+// ─── Main Component ────────────────────────────────────────────────────────────
 
 export default function ProjectsSectionNew() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [active, setActive] = useState<typeof ISLANDS[0] | null>(null);
+  const [phase, setPhase] = useState<"map" | "in" | "island" | "out">("map");
+  const particles = useRef(
+    Array.from({ length: 28 }, (_, i) => ({
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      color: ["#A3C9A8", "#89C2D9", "#FFAFCC", "#E2D4F0", "#FFE5B4"][i % 5],
+      delay: i * 0.35,
+    }))
+  ).current;
 
-  // Generate random rotation for each card
-  const cardRotations = useMemo(() => {
-    const rotations: Record<number, number> = {};
-    projects.forEach((p) => {
-      rotations[p.id] = (Math.random() - 0.5) * 6;
-    });
-    return rotations;
-  }, []);
-
-  // Generate random Y offsets for varied heights
-  const cardOffsets = useMemo(() => {
-    const offsets: Record<number, number> = {};
-    projects.forEach((p) => {
-      offsets[p.id] = Math.random() * 80;
-    });
-    return offsets;
-  }, []);
-
-  // Generate particles
-  const particles = useMemo(() => {
-    return Array.from({ length: 12 }).map((_, i) => {
-      const categories = Object.keys(categoryConfig) as Array<
-        keyof typeof categoryConfig
-      >;
-      const category = categories[i % categories.length];
-      return {
-        id: `particle-${i}`,
-        type: categoryConfig[category].particleType as
-          | "leaf"
-          | "sparkle"
-          | "ripple",
-        delay: i * 0.5,
-      };
-    });
-  }, []);
-
-  const getLink = (project: Project) => {
-    return (
-      project.github || project.demo || project.bandLab || project.Youtube || "#"
-    );
+  const openIsland = (island: typeof ISLANDS[0]) => {
+    setActive(island);
+    setPhase("in");
+    setTimeout(() => setPhase("island"), 650);
   };
 
+  const closeIsland = () => {
+    setPhase("out");
+    setTimeout(() => { setPhase("map"); setActive(null); }, 650);
+  };
+
+  const filtered = active ? PROJECTS.filter((p) => p.category === active.id) : [];
+
   return (
-    <section
-      id="projects"
-      className="relative min-h-screen py-20 z-10 flex flex-col items-center justify-center overflow-hidden"
-    >
+    <section id="projects" className="relative min-h-screen py-24 overflow-hidden flex flex-col items-center">
       <style>{`
-        @keyframes rope-sway {
-          0%, 100% { transform: translateX(0px) scaleX(1); }
-          50% { transform: translateX(8px) scaleX(1.02); }
+        @keyframes islandFloat {
+          0%,100% { transform: translateY(0px) rotate(0deg); }
+          33% { transform: translateY(-10px) rotate(0.4deg); }
+          66% { transform: translateY(-4px) rotate(-0.4deg); }
         }
-        @keyframes floating-leaf {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
-          50% { transform: translateY(-40px) rotate(180deg); opacity: 0.4; }
-          100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
+        @keyframes floatSym {
+          0%,100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+          50% { transform: translateY(-10px) rotate(8deg); opacity: 0.9; }
         }
-        @keyframes sparkle {
-          0%, 100% { opacity: 0.3; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.2); }
+        @keyframes waterShimmer {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
-        @keyframes ripple {
-          0% { 
-            transform: scale(0);
-            opacity: 1;
-          }
-          100% {
-            transform: scale(3);
-            opacity: 0;
-          }
+        @keyframes waterRipple {
+          0% { transform: scale(0.6); opacity: 0.6; }
+          100% { transform: scale(2.2); opacity: 0; }
         }
-        @keyframes mist-drift {
-          0% { transform: translateX(0) translateY(0); opacity: 0.1; }
-          50% { transform: translateX(30px) translateY(-20px); opacity: 0.15; }
-          100% { transform: translateX(0) translateY(0); opacity: 0.1; }
+        @keyframes waveMove {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        @keyframes card-sway {
-          0%, 100% { transform: translateY(0) rotate(var(--card-rotation)); }
-          50% { transform: translateY(-12px) rotate(var(--card-rotation)); }
+        @keyframes cloudDrift {
+          from { transform: translateX(-150px); }
+          to { transform: translateX(110vw); }
         }
-        @keyframes paper-float {
-          0%, 100% { transform: translateY(-8px) rotate(var(--card-rotation)); }
-          50% { transform: translateY(8px) rotate(var(--card-rotation)); }
+        @keyframes pathGlow {
+          0%,100% { opacity: 0.25; }
+          50% { opacity: 0.6; }
         }
-        
-        .rope-sway {
-          animation: rope-sway 3s ease-in-out infinite;
-          transform-origin: center;
+        @keyframes fadeScale {
+          from { opacity: 0; transform: scale(0.94); }
+          to { opacity: 1; transform: scale(1); }
         }
-        .floating-leaf {
-          animation: floating-leaf 8s ease-out forwards;
+        @keyframes floatParticle {
+          0%,100% { transform: translate(0,0); opacity: 0.5; }
+          50% { transform: translate(6px,-12px); opacity: 1; }
         }
-        .animate-sparkle {
-          animation: sparkle 2s ease-in-out infinite;
-        }
-        .animate-ripple {
-          animation: ripple 2s ease-out infinite;
-        }
-        .mist-background {
-          animation: mist-drift 12s ease-in-out infinite;
-        }
-        .card-float {
-          animation: paper-float 4s ease-in-out infinite;
-        }
-        .card-float:hover {
-          animation: card-sway 1.5s ease-in-out infinite;
-        }
-        
-        .paper-texture {
-          background-image: 
-            url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' result='noise'/%3E%3C/filter%3E%3Crect width='100' height='100' fill='%23fff' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-          background-size: 50px 50px;
-        }
-        
-        .handmade-corner {
-          border-radius: 
-            ${Math.random() * 8 + 12}% ${Math.random() * 8 + 12}% 
-            ${Math.random() * 8 + 12}% ${Math.random() * 8 + 12}% /
-            ${Math.random() * 8 + 12}% ${Math.random() * 8 + 12}% 
-            ${Math.random() * 8 + 12}% ${Math.random() * 8 + 12}%;
+        .path-glow { animation: pathGlow 3s ease-in-out infinite; }
+        .cloud-drift { animation: cloudDrift linear infinite; }
+        .fade-scale { animation: fadeScale 0.5s ease forwards; }
+        .water-ripple-ring {
+          position: absolute;
+          border-radius: 50%;
+          border: 1.5px solid rgba(255,255,255,0.45);
+          animation: waterRipple 3.5s ease-out infinite;
+          pointer-events: none;
         }
       `}</style>
 
-      {/* Background Magical Atmosphere */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Gradient Mist */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F2ED] to-[#EEE9E0]" />
-
-        {/* Magical Glow Orbs */}
-        <div
-          className="absolute top-20 left-10 w-96 h-96 rounded-full opacity-20 blur-3xl mist-background"
-          style={{
-            background: "radial-gradient(circle, #A3C9A8 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute bottom-20 right-10 w-80 h-80 rounded-full opacity-15 blur-3xl mist-background"
-          style={{
-            background: "radial-gradient(circle, #89C2D9 0%, transparent 70%)",
-            animationDelay: "-4s",
-          }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 w-72 h-72 rounded-full opacity-10 blur-3xl mist-background"
-          style={{
-            background: "radial-gradient(circle, #FFAFCC 0%, transparent 70%)",
-            animationDelay: "-8s",
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-
-        {/* Floating Particles */}
-        {particles.map((p) => (
-          <FloatingParticle
-            key={p.id}
-            id={p.id}
-            type={p.type}
-            delay={p.delay}
-          />
-        ))}
+      {/* ── Section header ── */}
+      <div
+        className="relative z-10 text-center mb-10 transition-all duration-500"
+        style={{ opacity: phase === "map" ? 1 : 0, pointerEvents: phase === "map" ? "auto" : "none" }}
+      >
+        <div className="inline-flex items-center gap-2 mb-3 px-4 py-1.5 rounded-full bg-white/60 border border-white/70 backdrop-blur-sm shadow-sm">
+          <Sparkles size={14} className="text-amber-400" />
+          <span className="text-xs font-semibold text-slate-500 tracking-widest uppercase">Interactive World Map</span>
+          <Sparkles size={14} className="text-amber-400" />
+        </div>
+        <h2 className="font-pixel text-3xl md:text-5xl text-[#2C3E50] mb-3">My Creative World</h2>
+        <p className="text-slate-500 max-w-md mx-auto text-sm leading-relaxed">
+          Three islands, one universe. Click an island to explore the artifacts within.
+        </p>
       </div>
 
-      <div className="container mx-auto px-6 max-w-7xl relative z-10">
-        {/* Section Header */}
-        <div className="flex flex-col items-center mb-20 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-6 h-6 text-[#A3C9A8]" />
-            <h2 className="font-pixel text-4xl md:text-5xl text-[#2C3E50]">
-              Floating Memories
-            </h2>
-            <Sparkles className="w-6 h-6 text-[#89C2D9]" />
+      {/* ── World Map ── */}
+      <div className="relative w-full max-w-6xl mx-auto px-4">
+        <div
+          className="relative w-full rounded-[40px] overflow-hidden border-4 border-white/50 shadow-2xl"
+          style={{
+            height: "clamp(440px, 70vh, 720px)",
+            background: "linear-gradient(180deg, #6ec6ea 0%, #4ab8e8 15%, #3aace0 35%, #5dc0e8 55%, #4ab5d8 75%, #62cce0 100%)",
+          }}
+        >
+          {/* ── Animated water base layers ── */}
+          {/* Deep shimmer */}
+          <div className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(180deg, #6ecfee88 0%, #3aa8d844 40%, #5bbfe844 100%)",
+              backgroundSize: "200% 200%",
+              animation: "waterShimmer 8s ease infinite",
+            }}
+          />
+
+          {/* Wave pattern layer 1 */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ opacity: 0.18 }}>
+            <svg width="200%" height="100%" viewBox="0 0 2400 100" preserveAspectRatio="none"
+              style={{ animation: "waveMove 6s linear infinite" }}>
+              <path d="M0,40 C200,70 400,10 600,40 C800,70 1000,10 1200,40 C1400,70 1600,10 1800,40 C2000,70 2200,10 2400,40 L2400,100 L0,100Z"
+                fill="rgba(255,255,255,0.6)" />
+            </svg>
           </div>
-          <p className="text-slate-600 font-medium max-w-2xl">
-            A collection of creative artifacts, handmade memories, and dreamy projects
-            suspended in a cozy fantasy world
-          </p>
-        </div>
 
-        {/* Floating Cards Container */}
-        <div className="relative w-full h-[1200px] md:h-[800px] lg:h-[900px]">
-          {/* Rope and Card System */}
-          {projects.map((project, idx) => {
-            const xPercent = (idx % 3) * 35 + 10 + Math.random() * 10;
-            const yPercent = Math.floor(idx / 3) * 40 + cardOffsets[project.id];
+          {/* Wave pattern layer 2 (offset) */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ opacity: 0.12, top: "20%" }}>
+            <svg width="200%" height="80%" viewBox="0 0 2400 80" preserveAspectRatio="none"
+              style={{ animation: "waveMove 10s linear infinite reverse" }}>
+              <path d="M0,30 C300,55 500,5 800,30 C1100,55 1300,5 1600,30 C1900,55 2100,5 2400,30 L2400,80 L0,80Z"
+                fill="rgba(255,255,255,0.5)" />
+            </svg>
+          </div>
 
-            const startX = (xPercent * window.innerWidth) / 100;
-            const startY = 0;
-            const endX = (xPercent * window.innerWidth) / 100;
-            const endY = (yPercent * 900) / 100;
+          {/* Sparkle glints on water surface */}
+          {[{x:12,y:18},{x:35,y:72},{x:58,y:14},{x:78,y:62},{x:22,y:50},{x:88,y:30},{x:50,y:85},{x:68,y:45}].map((g,i)=>(
+            <div key={i} className="absolute pointer-events-none"
+              style={{
+                left:`${g.x}%`, top:`${g.y}%`,
+                width:6, height:6,
+                background:"rgba(255,255,255,0.9)",
+                borderRadius:"50%",
+                boxShadow:"0 0 8px 3px rgba(255,255,255,0.6)",
+                animation:`floatParticle ${2.5+i*0.4}s ease-in-out infinite`,
+                animationDelay:`${i*0.5}s`,
+              }}
+            />
+          ))}
 
-            const isHovered = hoveredId === project.id;
+          {/* Water ripple rings at random spots */}
+          {[{x:"15%",y:"25%",s:60,d:"0s"},{x:"72%",y:"55%",s:80,d:"1.2s"},{x:"45%",y:"75%",s:50,d:"2.3s"},{x:"85%",y:"20%",s:45,d:"0.7s"}].map((r,i)=>(
+            <div key={i} className="water-ripple-ring"
+              style={{ left:r.x, top:r.y, width:r.s, height:r.s, animationDelay:r.d,
+                transform:`translate(-50%,-50%)` }}
+            />
+          ))}
 
-            return (
-              <div key={project.id}>
-                {/* Rope Line */}
-                {typeof window !== "undefined" && (
-                  <RopeLine
-                    id={`rope-${project.id}`}
-                    startX={startX}
-                    startY={startY}
-                    endX={endX}
-                    endY={endY}
-                  />
-                )}
+          {/* Island color reflection pools (under each island) */}
+          {ISLANDS.map((isl) => (
+            <div key={isl.id} className="absolute pointer-events-none"
+              style={{
+                left: `${isl.x + isl.size * 0.03}%`,
+                top: `${isl.y + 12}%`,
+                width: isl.size * 1.5,
+                height: isl.size * 0.6,
+                background: `radial-gradient(ellipse, ${isl.color}55 0%, ${isl.color}22 50%, transparent 75%)`,
+                filter: "blur(18px)",
+                transform: "scaleY(0.6)",
+              }}
+            />
+          ))}
 
-                {/* Card */}
-                <div
-                  className="absolute card-float transition-all duration-300 group"
-                  style={{
-                    left: `${xPercent}%`,
-                    top: `${yPercent}%`,
-                    "--card-rotation": `${cardRotations[project.id]}deg`,
-                  } as React.CSSProperties}
-                  onMouseEnter={() => setHoveredId(project.id)}
-                  onMouseLeave={() => setHoveredId(null)}
+          {/* Glowing paths connecting islands */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+            {/* Web Dev → Music Lake */}
+            <path d="M 30% 47% Q 45% 25% 68% 35%" stroke="rgba(163,201,168,0.55)" strokeWidth="3" fill="none"
+              strokeDasharray="8 6" filter="url(#glow)" className="path-glow" />
+            {/* Web Dev → Creative Studio */}
+            <path d="M 30% 52% Q 40% 68% 52% 68%" stroke="rgba(255,175,204,0.5)" strokeWidth="3" fill="none"
+              strokeDasharray="6 8" filter="url(#glow)" className="path-glow" />
+            {/* Music Lake → Creative Studio */}
+            <path d="M 72% 42% Q 68% 58% 57% 65%" stroke="rgba(137,194,217,0.5)" strokeWidth="3" fill="none"
+              strokeDasharray="7 5" filter="url(#glow)" className="path-glow" />
+          </svg>
+
+          {/* Clouds */}
+          {[
+            { top: "8%", dur: "38s", size: 80, delay: "0s" },
+            { top: "22%", dur: "55s", size: 110, delay: "-18s" },
+            { top: "70%", dur: "44s", size: 65, delay: "-9s" },
+          ].map((c, i) => (
+            <div key={i} className="cloud-drift absolute pointer-events-none opacity-60"
+              style={{ top: c.top, animationDuration: c.dur, animationDelay: c.delay }}>
+              <svg width={c.size} height={c.size * 0.55} viewBox="0 0 120 70" fill="none">
+                <ellipse cx="60" cy="50" rx="55" ry="22" fill="rgba(255,255,255,0.85)" />
+                <ellipse cx="40" cy="38" rx="28" ry="22" fill="rgba(255,255,255,0.85)" />
+                <ellipse cx="72" cy="34" rx="22" ry="18" fill="rgba(255,255,255,0.85)" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Star decorations */}
+          {[{ x: 8, y: 10 }, { x: 88, y: 8 }, { x: 12, y: 80 }, { x: 85, y: 78 }, { x: 50, y: 6 }].map((s, i) => (
+            <Star key={i} size={10 + i * 2} className="absolute pointer-events-none"
+              style={{ left: `${s.x}%`, top: `${s.y}%`, color: "#FFD700", opacity: 0.5,
+                animation: `floatSym ${2 + i}s ease-in-out infinite`, animationDelay: `${i * 0.7}s` }} />
+          ))}
+
+          {/* Islands */}
+          {ISLANDS.map((island) => (
+            <IslandCard key={island.id} island={island} onClick={() => openIsland(island)} />
+          ))}
+
+          {/* Cinematic fade overlay */}
+          <div className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-600"
+            style={{
+              background: active ? active.color + "22" : "transparent",
+              opacity: phase === "in" || phase === "out" ? 1 : 0,
+              backdropFilter: phase === "in" || phase === "out" ? "blur(8px)" : "none",
+            }}
+          />
+
+          {/* Island Detail Panel */}
+          {active && phase === "island" && (
+            <div className="absolute inset-0 z-40 flex flex-col fade-scale"
+              style={{
+                background: `linear-gradient(160deg, ${active.color}18 0%, #FDFBF7 50%)`,
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/40">
+                <button
+                  onClick={closeIsland}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 hover:bg-white border border-white/60 text-slate-700 text-sm font-bold transition-all hover:shadow-md"
                 >
-                  {/* Push Pin */}
-                  <PushPin color={project.color} />
+                  <ChevronLeft size={16} /> World Map
+                </button>
 
-                  {/* Main Card */}
-                  <div
-                    className={`relative w-64 bg-white/85 backdrop-blur-md shadow-2xl overflow-hidden transition-all duration-300 ${
-                      isHovered
-                        ? "scale-105 shadow-3xl"
-                        : "hover:scale-102"
-                    }`}
-                    style={{
-                      borderRadius: `${Math.random() * 8 + 16}% ${Math.random() * 8 + 16}% ${Math.random() * 8 + 16}% ${Math.random() * 8 + 16}%`,
-                      border: `2px solid ${project.color}30`,
-                      boxShadow: isHovered
-                        ? `0 20px 40px rgba(0,0,0,0.15), 0 0 30px ${project.color}40`
-                        : "0 10px 30px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    {/* Paper Texture Overlay */}
-                    <div
-                      className="absolute inset-0 paper-texture pointer-events-none z-10"
-                      style={{ opacity: 0.3 }}
-                    />
-
-                    {/* Tape Corners */}
-                    <TapeCorner position="top-left" />
-                    <TapeCorner position="top-right" />
-                    <TapeCorner position="bottom-left" />
-                    <TapeCorner position="bottom-right" />
-
-                    {/* Image Section */}
-                    <div
-                      className="w-full h-40 overflow-hidden relative"
-                      style={{
-                        background: `linear-gradient(135deg, ${project.color}40, ${project.color}20)`,
-                      }}
-                    >
-                      {project.img && (
-                        <img
-                          src={project.img}
-                          alt={project.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      )}
-                      <div
-                        className="absolute inset-0 flex items-center justify-center"
-                        style={{
-                          background: `linear-gradient(135deg, ${project.color}30 0%, ${project.color}50 100%)`,
-                        }}
-                      >
-                        {!project.img && (
-                          <div
-                            className="w-12 h-12 rounded-full flex items-center justify-center text-white"
-                            style={{ backgroundColor: project.color }}
-                          >
-                            <Code2 size={24} />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="p-4">
-                      {/* Title & Category */}
-                      <h3 className="font-pixel text-base text-[#2C3E50] mb-2 line-clamp-2">
-                        {project.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-xs text-slate-600 line-clamp-3 mb-3 leading-relaxed">
-                        {project.desc}
-                      </p>
-
-                      {/* Tech Stack */}
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {project.tech.slice(0, 2).map((t, i) => (
-                          <span
-                            key={i}
-                            className="text-[9px] px-2 py-1 rounded-full font-bold text-white"
-                            style={{ backgroundColor: project.color }}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                        {project.tech.length > 2 && (
-                          <span className="text-[9px] px-2 py-1 rounded-full font-bold text-slate-600 bg-slate-100">
-                            +{project.tech.length - 2}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-2">
-                        {project.github && (
-                          <button
-                            onClick={() => window.open(project.github, "_blank")}
-                            className="flex-1 flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition-all text-xs font-bold hover:scale-105"
-                          >
-                            <Github size={12} />
-                            <span>Code</span>
-                          </button>
-                        )}
-
-                        {(project.demo && project.demo !== "#") ||
-                        project.bandLab ||
-                        project.Youtube ? (
-                          <button
-                            onClick={() => {
-                              const url = getLink(project);
-                              if (url && url !== "#") window.open(url, "_blank");
-                            }}
-                            className="flex-1 flex items-center justify-center gap-1 px-2 py-2 rounded-lg text-white transition-all text-xs font-bold hover:scale-105"
-                            style={{
-                              backgroundColor: project.color,
-                            }}
-                          >
-                            <Play size={12} />
-                            <span>View</span>
-                          </button>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    {/* Glow Effect on Hover */}
-                    {isHovered && (
-                      <div
-                        className="absolute inset-0 pointer-events-none rounded-2xl animate-pulse"
-                        style={{
-                          backgroundColor: `${project.color}20`,
-                          boxShadow: `inset 0 0 30px ${project.color}30`,
-                        }}
-                      />
-                    )}
+                <div className="flex items-center gap-3 px-5 py-2 rounded-2xl bg-white/80 border border-white/60 backdrop-blur-sm">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: active.color }}>
+                    <active.icon size={16} className="text-white" />
+                  </div>
+                  <div>
+                    <p className="font-pixel text-sm text-slate-800">{active.name}</p>
+                    <p className="text-[11px] text-slate-500">{active.tagline}</p>
                   </div>
                 </div>
+
+                <div className="text-xs text-slate-400 font-medium hidden md:block">
+                  {filtered.length} artifact{filtered.length !== 1 ? "s" : ""} found
+                </div>
               </div>
+
+              {/* Project cards */}
+              <div className="flex-1 overflow-auto p-6">
+                {filtered.length > 0 ? (
+                  <div className="flex gap-5 flex-wrap justify-center">
+                    {filtered.map((p) => (
+                      <ProjectCard key={p.id} project={p} accentColor={active.color} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center gap-4">
+                    <div className="text-5xl">🗺️</div>
+                    <h4 className="font-pixel text-xl text-slate-500">Uncharted Territory</h4>
+                    <p className="text-slate-400 text-sm">No artifacts discovered here yet — check back soon!</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Legend */}
+        <div
+          className="flex items-center justify-center gap-6 mt-6 flex-wrap transition-all duration-500"
+          style={{ opacity: phase === "map" ? 1 : 0 }}
+        >
+          {ISLANDS.map((isl) => {
+            const Icon = isl.icon;
+            return (
+              <button key={isl.id} onClick={() => openIsland(isl)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-white/60 backdrop-blur-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+              >
+                <div className="w-6 h-6 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: isl.color }}>
+                  <Icon size={12} className="text-white" />
+                </div>
+                <span className="text-xs font-bold text-slate-600">{isl.name}</span>
+              </button>
             );
           })}
         </div>
-      </div>
-    </section>
-  );
-}
-  
-  const projects = [
-
-  // =====================================
-  // CODE PROJECTS
-  // =====================================
-  {
-    id: 1,
-    title: "ClassTeams-Info",
-    category: "code",
-    desc: "The website used to promote Teams classes uses Next.js and Tailwind CSS.",
-    tech: ["Next.js", "Tailwind CSS", "Supabase"],
-    color: "#A3C9A8",
-    img: "/assets/images/project-1.png",
-    demo: "#",
-    github: "https://github.com/lufikaZkl30/classteams-info",
-  },
-
-  {
-    id: 2,
-    title: "YT Emotion Analyzer",
-    category: "code",
-    desc: "A website for analyzing YouTube comments using the Google API and Chart.js.",
-    tech: ["HTML", "Tailwind CSS", "JavaScript", "Python"],
-    color: "#A2D2FF",
-    img: "/assets/images/project-2.png",
-    demo: "#",
-    github: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
-  },
-
-  {
-    id: 3,
-    title: "MindEase Bot AI",
-    category: "code",
-    desc: "AI chatbot for helping users manage stress and relaxation.",
-    tech: ["Node.js", "JavaScript", "Gemini API"],
-    color: "#FDE2E4",
-    img: "/assets/images/project-3.png",
-    demo: "#",
-    github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real",
-  },
-
-  // =====================================
-  // MUSIC PROJECTS
-  // =====================================
-
-  {
-    id: 4,
-    title: "Loser In You (Prod.Lotus)",
-    category: "music",
-    desc: "“Loser In You” is a song about the loss of a once-close friendship. It tells of memories that are hard to forget and feelings that linger to this day.",
-    tech: ["BandLab", "R&B & Soul", "Mixing","Collaboration"],
-    color: "#89C2D9",
-    img: "/assets/images/music-1.png",
-    bandLab: "https://www.bandlab.com/post/d733931e-5776-49c3-9cd6-d1dcdfd835f1",
-  },
-
-
-  // =====================================
-  // EDITING PROJECTS
-  // =====================================
-  {
-    id: 7,
-    title: "Anime Velocity Edit",
-    category: "edit",
-    desc: "Cinematic anime edit dengan transisi cepat dan efek velocity smooth.",
-    tech: ["After Effects", "AMV", "Velocity"],
-    color: "#FFAFCC",
-    img: "/assets/images/edit-1.png",
-    Youtube: "#",
-  },
-
- 
-];
-
-// Define the islands representing project categories
-  const islands: Island[] = [
-    {
-      id: 'code',
-      title: 'Web Dev Village',
-      color: '#A3C9A8',
-      darkColor: '#7A9D7E',
-      position: 'top-[8%] left-[5%] md:top-[15%] md:left-[12%]',
-      size: 'w-44 h-44 md:w-60 md:h-60',
-      icon: Code2,
-      decor: Trees,
-      animationDelay: '0s',
-      borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
-    },
-    {
-      id: 'edit',
-      title: 'Creative Studio',
-      color: '#FDE2E4',
-      darkColor: '#D3A5A9',
-      position: 'bottom-[5%] left-[50%] -translate-x-1/2 md:bottom-[10%]',
-      size: 'w-48 h-48 md:w-72 md:h-72',
-      icon: Video,
-      decor: Tent,
-      animationDelay: '1.5s',
-      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
-    },
-    {
-      id: 'music',
-      title: 'Music Lake',
-      color: '#A2D2FF',
-      darkColor: '#7AABC8',
-      position: 'top-[15%] right-[5%] md:top-[20%] md:right-[10%]',
-      size: 'w-36 h-36 md:w-52 md:h-52',
-      icon: Music,
-      decor: Star,
-      animationDelay: '0.7s',
-      borderRadius: '50% 50% 60% 40% / 40% 60% 40% 60%'
-    }
-  ];
-
-  const handleIslandClick = (island: Island) => {
-    setSelectedIsland(island);
-    setMapState('zooming_in');
-    setTimeout(() => {
-      setMapState('island');
-    }, 800);
-  };
-
-  const handleBackToMap = () => {
-    setMapState('zooming_out');
-    setTimeout(() => {
-      setMapState('map');
-      setSelectedIsland(null);
-    }, 800);
-  };
-
-  const filteredProjects = selectedIsland ? projects.filter(p => p.category === selectedIsland.id) : [];
-
-  return (
-    <section id="projects" className="relative min-h-screen py-24 z-10 flex flex-col items-center justify-center">
-      <style>{`
-        .water-ripple {
-          position: absolute;
-          border: 2px solid rgba(255,255,255,0.4);
-          border-radius: 50%;
-          animation: ripple 4s linear infinite;
-        }
-        @keyframes ripple {
-          0% { transform: scale(0.8); opacity: 1; border-width: 3px; }
-          100% { transform: scale(2.5); opacity: 0; border-width: 1px; }
-        }
-        .island-shadow {
-          box-shadow: inset -10px -15px 0px rgba(0,0,0,0.1), 0 20px 40px rgba(0,0,0,0.15);
-        }
-        .island-hover-glow {
-          transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .island-hover-glow:hover {
-          transform: scale(1.08) translateY(-15px);
-          filter: brightness(1.05);
-          box-shadow: inset -10px -15px 0px rgba(0,0,0,0.1), 0 30px 50px rgba(255,255,255,0.6);
-          z-index: 20;
-        }
-        .cinematic-overlay {
-          position: absolute;
-          inset: 0;
-          background: #FDFBF7;
-          pointer-events: none;
-          z-index: 50;
-          transition: opacity 0.8s ease-in-out;
-        }
-      `}</style>
-
-      <div className="container mx-auto px-6 max-w-6xl relative">
-        
-        {/* Section Header */}
-        <div className={`flex flex-col items-center mb-10 text-center transition-all duration-700 ${mapState === 'map' ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-8 pointer-events-none absolute left-1/2 -translate-x-1/2'}`}>
-          <h2 className="font-pixel text-4xl md:text-5xl text-[#2C3E50] mb-4">Project Island World Map</h2>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-sm">
-             <MapIcon size={16} className="text-[#A2D2FF]" />
-             <span className="text-slate-600 font-medium tracking-wide text-sm">Select an island region to explore artifacts</span>
-          </div>
-        </div>
-
-        {/* Immersive Map Container */}
-        <div className="relative w-full h-[600px] md:h-[750px] bg-gradient-to-b from-[#E0F4FF] to-[#C9E9F6] rounded-[40px] border-8 border-white shadow-2xl overflow-hidden">
-          
-          {/* Cinematic Fade Overlay */}
-          <div className="cinematic-overlay" style={{ opacity: (mapState === 'zooming_in' || mapState === 'zooming_out') ? 1 : 0 }} />
-
-          {/* LAYER 1: The Map View */}
-          <div className={`absolute inset-0 transition-all duration-1000 ease-in-out origin-center ${mapState === 'map' ? 'opacity-100 scale-100 z-10' : mapState === 'zooming_in' ? 'opacity-0 scale-150 z-0 pointer-events-none' : 'opacity-0 scale-90 z-0 pointer-events-none'}`}>
-            
-            {/* Ambient Water Environment */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==')] bg-repeat opacity-20 mix-blend-overlay"></div>
-            <div className="water-ripple top-[20%] left-[30%] w-32 h-32"></div>
-            <div className="water-ripple top-[60%] right-[20%] w-48 h-48" style={{ animationDelay: '1.5s' }}></div>
-            <div className="water-ripple bottom-[30%] left-[15%] w-24 h-24" style={{ animationDelay: '2.5s' }}></div>
-
-            {/* Drifting Clouds overlaying the map */}
-            <div className="absolute top-[15%] left-0 text-white/80 animate-drift pointer-events-none drop-shadow-md" style={{ animationDuration: '40s' }}><Cloud size={90} fill="currentColor" /></div>
-            <div className="absolute top-[50%] left-0 text-white/60 animate-drift pointer-events-none drop-shadow-md" style={{ animationDuration: '60s', animationDelay: '-15s' }}><Cloud size={140} fill="currentColor" /></div>
-
-            {/* Interactive Islands */}
-            {islands.map((island) => {
-              const Decor = island.decor;
-              const IconComp = island.icon;
-              return (
-                <div
-                  key={island.id}
-                  onClick={() => handleIslandClick(island)}
-                  className={`absolute ${island.position} ${island.size} cursor-pointer island-hover-glow island-shadow animate-float flex flex-col items-center justify-center group`}
-                  style={{
-                    backgroundColor: island.color,
-                    animationDelay: island.animationDelay,
-                    border: '6px solid rgba(255,255,255,0.6)',
-                    borderRadius: island.borderRadius,
-                  }}
-                >
-                  {/* Island Decor */}
-                  <Decor size={36} className="absolute top-4 left-6 text-white/50 drop-shadow-sm" />
-                  <Decor size={24} className="absolute bottom-8 right-6 text-white/50 drop-shadow-sm" />
-                  <Decor size={16} className="absolute top-1/2 left-4 text-white/40 drop-shadow-sm" />
-
-                  {/* Main Icon Plate */}
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/90 shadow-lg flex items-center justify-center mb-3 transform group-hover:-translate-y-3 transition-transform duration-500 relative z-10 border-4 border-white">
-                    <IconComp size={36} style={{ color: island.darkColor }} className="drop-shadow-sm" />
-                    
-                    {/* Glowing ping effect */}
-                    <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:animate-ping group-hover:opacity-50"></div>
-                  </div>
-
-                  {/* Island Title Label */}
-                  <span className="font-pixel text-lg md:text-xl text-center px-5 py-2 rounded-2xl bg-white/95 text-slate-700 shadow-md transform group-hover:scale-110 transition-transform duration-300 relative z-10">
-                    {island.title}
-                  </span>
-
-                  {/* Floating environmental particles */}
-                  <div className="absolute top-[10%] right-[20%] w-3 h-3 bg-white rounded-full animate-pulse opacity-80 blur-[1px]"></div>
-                  <div className="absolute bottom-[20%] left-[10%] w-2 h-2 bg-white rounded-full animate-pulse opacity-60 blur-[1px]" style={{ animationDelay: '1s'}}></div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* LAYER 2: Island Projects Details View */}
-          <div className={`absolute inset-0 bg-[#FDFBF7] transition-opacity duration-1000 overflow-y-auto custom-scrollbar ${mapState === 'island' ? 'opacity-100 z-20' : 'opacity-0 z-0 pointer-events-none'}`}>
-            {selectedIsland && (
-              <div className="min-h-full p-6 md:p-12 relative flex flex-col">
-                
-                {/* Subtle themed background glow */}
-                <div className="absolute top-0 left-0 w-full h-96 opacity-30 pointer-events-none" style={{ background: `linear-gradient(to bottom, ${selectedIsland.color}, transparent)` }}></div>
-
-                {/* Navigation & Header */}
-                <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6 relative z-10">
-                  <button
-                    onClick={handleBackToMap}
-                    className="group flex items-center gap-3 px-6 py-3 rounded-2xl bg-white border-2 border-slate-200 hover:border-[#2C3E50] text-slate-600 hover:text-[#2C3E50] transition-all shadow-sm hover:shadow-md self-start md:self-auto"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#2C3E50] group-hover:text-white transition-colors">
-                      <MapIcon size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-                    </div>
-                    <span className="font-bold text-sm tracking-widest uppercase">Return to Map</span>
-                  </button>
-
-                  <div className="flex items-center gap-4 bg-white/80 px-6 py-3 rounded-2xl shadow-sm border border-white backdrop-blur-md">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-inner" style={{ backgroundColor: selectedIsland.color }}>
-                      <selectedIsland.icon size={20} />
-                    </div>
-                    <h3 className="font-pixel text-2xl md:text-3xl text-[#2C3E50]">{selectedIsland.title}</h3>
-                  </div>
-                </div>
-
-                {/* Filtered Artifacts Grid - Horizontal Scrollable */}
-                <div className="relative z-10 flex-grow flex flex-col">
-                  <div className="overflow-x-auto custom-scrollbar pb-4">
-                    <div className="flex gap-6 min-w-full px-6">
-                      {filteredProjects.length > 0 ? filteredProjects.map((project, idx) => (
-                        <div 
-                          key={project.id} 
-                          className="flex-shrink-0 w-80 glass-card bg-white/70 flex flex-col group interactive-hover relative overflow-hidden border-2 border-transparent hover:border-slate-200 animate-fade-in-up"
-                          style={{ animationDelay: `${idx * 0.1}s` }}
-                        >
-                          {/* Project Preview Area */}
-                          <div 
-                            className="w-full h-40 relative overflow-hidden flex items-center justify-center bg-cover bg-center"
-                            style={{
-                              backgroundImage: `url('${project.img}')`,
-                              borderBottom: `2px solid ${selectedIsland.color}30`
-                            }}
-                          >
-                            {/* Overlay Gradient */}
-                            <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${selectedIsland.color}40 0%, ${selectedIsland.color}60 100%)` }}></div>
-
-                            {/* Fallback Icon if image fails */}
-                            <div className="relative z-10 flex flex-col items-center gap-2 text-center group-hover:opacity-0 transition-opacity">
-                              <div 
-                                className="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg transform group-hover:scale-125 group-hover:-rotate-12 transition-all duration-500"
-                                style={{ backgroundColor: selectedIsland.color }}
-                              >
-                                <selectedIsland.icon size={32} />
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Content Section */}
-                          <div className="p-5 flex flex-col flex-grow relative z-10">
-                            {/* Decorative Background Blur */}
-                            <div 
-                              className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-700"
-                              style={{ backgroundColor: selectedIsland.color }}
-                            ></div>
-
-                            <div className="relative z-10 mb-3">
-                              <h3 className="font-pixel text-lg text-[#2C3E50] mb-2 group-hover:text-slate-800 transition-colors line-clamp-2">{project.title}</h3>
-                              <p className="text-slate-600 text-xs leading-relaxed font-medium line-clamp-3">
-                                {project.desc}
-                              </p>
-                            </div>
-
-                            <div className="mt-auto relative z-10 pt-4">
-                              <div className="flex flex-wrap gap-1.5 mb-4">
-                                {project.tech.slice(0, 3).map((t, i) => (
-                                  <span key={i} className="text-[10px] font-bold tracking-wide px-2 py-1 bg-slate-100 text-slate-600 rounded-md shadow-inner">
-                                    {t}
-                                  </span>
-                                ))}
-                                {project.tech.length > 3 && (
-                                  <span className="text-[10px] font-bold tracking-wide px-2 py-1 bg-slate-100 text-slate-600 rounded-md shadow-inner">
-                                    +{project.tech.length - 3}
-                                  </span>
-                                )}
-                              </div>
-                              
-                              {/* Action Buttons */}
-                              <div className="flex items-center gap-2">
-                                {/* GitHub Button */}
-                                {(project as any).github && (
-                                  <button 
-                                    onClick={() => window.open((project as any).github, "_blank")}
-                                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition-all duration-300 hover:scale-105 text-xs font-bold"
-                                  >
-                                    <Github size={14} />
-                                    <span>GitHub</span>
-                                  </button>
-                                )}
-                                
-                                {/* Demo/Link Button */}
-                                {((project as any).demo && (project as any).demo !== "#") || (project as any).bandLab || (project as any).Youtube ? (
-                                  <button 
-                                    onClick={() => {
-                                      const url = (project as any).demo || (project as any).bandLab || (project as any).Youtube;
-                                      if (url && url !== "#") window.open(url, "_blank");
-                                    }}
-                                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white transition-all duration-300 hover:scale-105 text-xs font-bold"
-                                    style={{ backgroundColor: selectedIsland.color }}
-                                  >
-                                    <Play size={14} />
-                                    <span>View</span>
-                                  </button>
-                                ) : null}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )) : (
-                        <div className="w-full flex flex-col items-center justify-center py-20 text-center text-slate-400">
-                          <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
-                            <Trees size={40} className="opacity-40" />
-                          </div>
-                          <h4 className="font-pixel text-2xl text-slate-500 mb-2">Uncharted Territory</h4>
-                          <p className="font-medium">No artifacts discovered in this region yet. Check back soon!</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            )}
-          </div>
-        </div>
-
       </div>
     </section>
   );
