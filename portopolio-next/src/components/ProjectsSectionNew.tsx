@@ -1,630 +1,450 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Code2, Music, Video, Github, ExternalLink, ChevronLeft, Star, Sparkles, Play } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Github, ExternalLink, Play, X, ChevronLeft } from "lucide-react";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
+// ─── Types ─────────────────────────────────────────────────────────────────────
 interface Project {
   id: number;
   title: string;
   category: "code" | "music" | "edit";
   desc: string;
   tech: string[];
-  color: string;
   github?: string;
   demo?: string;
   bandLab?: string;
   youtube?: string;
+  emoji: string;
+  image?: string; // preview screenshot
 }
 
+// ─── Data ──────────────────────────────────────────────────────────────────────
 const PROJECTS: Project[] = [
   {
-    id: 1, title: "ClassTeams-Info", category: "code",
+    id: 1, title: "ClassTeams-Info", category: "code", emoji: "🏫",
     desc: "Website to promote Teams classes built with Next.js and Supabase.",
     tech: ["Next.js", "Tailwind CSS", "Supabase"],
-    color: "#A3C9A8",
-    github: "https://github.com/lufikaZkl30/classteams-info", demo: "#",
+    github: "https://github.com/lufikaZkl30/classteams-info",
+    image: "/assets/images/project-1.png",
   },
   {
-    id: 2, title: "YT Emotion Analyzer", category: "code",
-    desc: "Analyzes YouTube comments using Google API and Chart.js.",
-    tech: ["HTML", "Tailwind CSS", "JavaScript", "Python"],
-    color: "#A3C9A8",
-    github: "https://github.com/lufikaZkl30/yt-emotion-analyzer", demo: "#",
+    id: 2, title: "YT Emotion Analyzer", category: "code", emoji: "💬",
+    desc: "Analyzes YouTube comments using Google API and Chart.js for emotion tracking.",
+    tech: ["HTML", "JavaScript", "Python"],
+    github: "https://github.com/lufikaZkl30/yt-emotion-analyzer",
+    image: "/assets/images/project-2.png",
   },
   {
-    id: 3, title: "MindEase Bot AI", category: "code",
-    desc: "AI chatbot for helping users manage stress and relaxation.",
-    tech: ["Node.js", "JavaScript", "Gemini API"],
-    color: "#A3C9A8",
-    github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real", demo: "#",
+    id: 3, title: "MindEase Bot AI", category: "code", emoji: "🧠",
+    desc: "AI chatbot for helping users manage stress and relaxation with Gemini.",
+    tech: ["Node.js", "Gemini API", "Python"],
+    github: "https://github.com/lufikaZkl30/MindEase-ChatBot-Real",
+    image: "/assets/images/project-3.png",
   },
   {
-    id: 4, title: "Loser In You (Prod. Lotus)", category: "music",
-    desc: "A song about the loss of a once-close friendship — lingering memories and feelings.",
-    tech: ["BandLab", "R&B & Soul", "Mixing", "Collaboration"],
-    color: "#89C2D9",
+    id: 4, title: "Loser In You", category: "music", emoji: "🎵",
+    desc: "A song about the loss of a once-close friendship — lingering memories.",
+    tech: ["BandLab", "R&B & Soul", "Mixing"],
     bandLab: "https://www.bandlab.com/post/d733931e-5776-49c3-9cd6-d1dcdfd835f1",
+    image: "/assets/images/music-1.png",
   },
   {
-    id: 7, title: "Anime Velocity Edit", category: "edit",
+    id: 5, title: "Anime Velocity Edit", category: "edit", emoji: "🎬",
     desc: "Cinematic anime edit with fast transitions and smooth velocity effects.",
-    tech: ["After Effects", "AMV", "Velocity"],
-    color: "#FFAFCC",
-    youtube: "#",
+    tech: ["After Effects", "AMV"],
   },
 ];
 
-const ISLANDS = [
+// ─── Category cloud config ─────────────────────────────────────────────────────
+const CATEGORIES = [
   {
     id: "code" as const,
-    name: "Web Dev Village",
-    tagline: "Where code meets magic",
-    icon: Code2,
-    color: "#A3C9A8",
-    dark: "#5A8C60",
-    glow: "rgba(163,201,168,0.4)",
-    particle: "⌨️",
-    symbols: ["</>", "{}", "//", "=>", "[]"],
-    // positioned: left area
-    x: 18, y: 32,
-    size: 230,
-    shape: "40% 60% 55% 45% / 45% 40% 60% 55%",
+    label: "Code",
+    emoji: "⌨️",
+    tagline: "Web Dev Village",
+    fill: "rgba(210,195,255,0.88)",
+    glow: "#b8a4f8",
+    border: "#ccc0ff",
+    textColor: "#2d1a5a",
+    left: "8%",
+    top: "12%",
+    floatY: [-10, 2, -8, 2, -10],
+    dur: 8,
   },
   {
     id: "music" as const,
-    name: "Music Lake",
-    tagline: "Sounds from the deep",
-    icon: Music,
-    color: "#89C2D9",
-    dark: "#4A8CAD",
-    glow: "rgba(137,194,217,0.4)",
-    particle: "🎵",
-    symbols: ["♪", "♫", "~", "◉", "♬"],
-    // positioned: right area
-    x: 62, y: 18,
-    size: 195,
-    shape: "50% 50% 60% 40% / 40% 55% 45% 60%",
+    label: "Music",
+    emoji: "🎵",
+    tagline: "Music Lake",
+    fill: "rgba(185,225,255,0.88)",
+    glow: "#85ccf5",
+    border: "#a8dcff",
+    textColor: "#0f3060",
+    left: "60%",
+    top: "8%",
+    floatY: [-8, 4, -12, 4, -8],
+    dur: 9.5,
   },
   {
     id: "edit" as const,
-    name: "Creative Studio",
-    tagline: "Frames of imagination",
-    icon: Video,
-    color: "#FFAFCC",
-    dark: "#C96E94",
-    glow: "rgba(255,175,204,0.4)",
-    particle: "✨",
-    symbols: ["▶", "◼", "◀◀", "▶▶", "⬛"],
-    // positioned: center
-    x: 40, y: 44,
-    size: 210,
-    shape: "60% 40% 45% 55% / 55% 60% 40% 45%",
+    label: "Content",
+    emoji: "🎬",
+    tagline: "Creative Studio",
+    fill: "rgba(255,210,225,0.88)",
+    glow: "#ffaac0",
+    border: "#ffcad8",
+    textColor: "#5a1030",
+    left: "35%",
+    top: "38%",
+    floatY: [-6, 5, -10, 5, -6],
+    dur: 10,
   },
 ];
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
+const TAG_COLORS: Record<string, string> = {
+  "Next.js": "#c8b4f8", "Tailwind CSS": "#a5d8ff", "Supabase": "#b2f2bb",
+  "HTML": "#ffd6a5", "JavaScript": "#fdffb6", "Python": "#caffbf",
+  "Node.js": "#b2f2bb", "Gemini API": "#ffc6ff", "BandLab": "#ffd6a5",
+  "R&B & Soul": "#fdffb6", "Mixing": "#a5d8ff", "After Effects": "#ffc6ff", "AMV": "#c8b4f8",
+};
 
-function FloatingSymbol({ sym, delay, color }: { sym: string; delay: number; color: string }) {
+// ─── Cloud SVG ─────────────────────────────────────────────────────────────────
+function CloudSvg({ w = 240, fill, glow, hovered }: { w?: number; fill: string; glow: string; hovered?: boolean }) {
+  const h = w * 0.5;
   return (
-    <span
-      className="absolute text-xs font-mono font-bold pointer-events-none select-none"
-      style={{
-        color,
-        opacity: 0.6,
-        left: `${15 + Math.random() * 70}%`,
-        top: `${15 + Math.random() * 70}%`,
-        animation: `floatSym ${3 + Math.random() * 3}s ease-in-out infinite`,
-        animationDelay: `${delay}s`,
-      }}
-    >
-      {sym}
-    </span>
+    <svg width={w} height={h} viewBox="0 0 240 120" fill="none"
+      style={{ filter: hovered ? `drop-shadow(0 0 20px ${glow})` : `drop-shadow(0 8px 20px rgba(0,0,0,0.2))`, transition: "filter 0.4s" }}>
+      <ellipse cx="120" cy="96" rx="112" ry="26" fill={fill} />
+      <ellipse cx="78" cy="78" rx="54" ry="42" fill={fill} />
+      <ellipse cx="152" cy="72" rx="48" ry="40" fill={fill} />
+      <ellipse cx="112" cy="58" rx="42" ry="36" fill={fill} />
+      <ellipse cx="100" cy="52" rx="24" ry="12" fill="rgba(255,255,255,0.5)" />
+    </svg>
   );
 }
 
-function Particle({ x, y, color, delay }: { x: number; y: number; color: string; delay: number }) {
+// Mini cloud SVG for project cards
+function MiniCloudSvg({ fill, glow, hovered }: { fill: string; glow: string; hovered?: boolean }) {
   return (
-    <div
-      className="absolute w-1.5 h-1.5 rounded-full pointer-events-none"
-      style={{
-        left: `${x}%`, top: `${y}%`,
-        backgroundColor: color,
-        boxShadow: `0 0 6px ${color}`,
-        animation: `particleDrift ${4 + Math.random() * 4}s ease-in-out infinite`,
-        animationDelay: `${delay}s`,
-        opacity: 0.7,
-      }}
-    />
+    <svg width={200} height={100} viewBox="0 0 200 100" fill="none"
+      style={{ filter: hovered ? `drop-shadow(0 0 14px ${glow})` : `drop-shadow(0 4px 14px rgba(0,0,0,0.18))`, transition: "filter 0.35s" }}>
+      <ellipse cx="100" cy="82" rx="92" ry="20" fill={fill} />
+      <ellipse cx="65" cy="66" rx="44" ry="34" fill={fill} />
+      <ellipse cx="128" cy="60" rx="38" ry="32" fill={fill} />
+      <ellipse cx="96" cy="46" rx="34" ry="28" fill={fill} />
+      <ellipse cx="88" cy="40" rx="18" ry="10" fill="rgba(255,255,255,0.5)" />
+    </svg>
   );
 }
 
-function IslandCard({ island, onClick }: { island: typeof ISLANDS[0]; onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  const Icon = island.icon;
+// ─── Ambient sparkles ──────────────────────────────────────────────────────────
+const SPARKLES = Array.from({ length: 16 }, (_, i) => ({
+  id: i,
+  x: Math.random() * 100, y: Math.random() * 100,
+  size: 3 + Math.random() * 4,
+  dur: 3 + Math.random() * 4,
+  delay: Math.random() * 5,
+  color: ["#e8d5ff", "#c8e8ff", "#ffd6e8", "#fff5cc"][i % 4],
+}));
+
+// ─── Category Cloud button ─────────────────────────────────────────────────────
+function CategoryCloud({
+  cat, delay, onClick,
+}: {
+  cat: typeof CATEGORIES[0];
+  delay: number;
+  onClick: () => void;
+}) {
+  const [hov, setHov] = useState(false);
 
   return (
-    <div
-      className="absolute cursor-pointer select-none group"
-      style={{ left: `${island.x}%`, top: `${island.y}%`, zIndex: hovered ? 20 : 10 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onClick}
+    <motion.div
+      className="absolute cursor-pointer select-none"
+      style={{ left: cat.left, top: cat.top }}
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay, ease: "easeOut" }}
     >
-      {/* Glow ring */}
-      <div
-        className="absolute inset-0 rounded-full pointer-events-none transition-all duration-700"
-        style={{
-          background: `radial-gradient(circle, ${island.glow} 0%, transparent 70%)`,
-          transform: hovered ? "scale(1.4)" : "scale(1.1)",
-          filter: "blur(20px)",
-          zIndex: -1,
-        }}
-      />
-
-      {/* Water shadow / reflection under island */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          bottom: -18,
-          left: "10%",
-          width: "80%",
-          height: 28,
-          background: `radial-gradient(ellipse, ${island.color}55 0%, transparent 75%)`,
-          filter: "blur(10px)",
-          transform: hovered ? "scaleX(1.15)" : "scaleX(1)",
-          transition: "transform 0.5s ease",
-        }}
-      />
-
-      {/* Island body */}
-      <div
-        className="relative flex flex-col items-center justify-center transition-all duration-500"
-        style={{
-          width: island.size,
-          height: island.size,
-          background: `
-            radial-gradient(ellipse at 50% 30%, #f5f0e8 0%, ${island.color}cc 35%, ${island.color} 60%, ${island.dark}99 100%)
-          `,
-          borderRadius: island.shape,
-          boxShadow: hovered
-            ? `0 28px 56px rgba(0,0,0,0.22), 0 8px 24px ${island.glow}, inset -6px -10px 0 rgba(0,0,0,0.07), inset 0 6px 12px rgba(255,255,255,0.4)`
-            : `0 16px 36px rgba(0,0,0,0.16), inset -5px -8px 0 rgba(0,0,0,0.05), inset 0 4px 10px rgba(255,255,255,0.35)`,
-          transform: hovered ? "translateY(-16px) scale(1.04)" : "translateY(0) scale(1)",
-          border: "3px solid rgba(255,255,255,0.6)",
-          animation: `islandFloat ${5 + Math.random() * 3}s ease-in-out infinite`,
-          animationDelay: `${Math.random() * 2}s`,
-        }}
+      <motion.div
+        animate={{ y: cat.floatY }}
+        transition={{ duration: cat.dur, repeat: Infinity, ease: "easeInOut", times: [0, 0.25, 0.5, 0.75, 1] }}
+        onHoverStart={() => setHov(true)}
+        onHoverEnd={() => setHov(false)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.96 }}
+        onClick={onClick}
+        style={{ display: "inline-block" }}
       >
-        {/* Sandy beach ring around the bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none rounded-b-[inherit]"
-          style={{
-            background: `linear-gradient(to bottom, transparent, ${island.color}88 60%, ${island.dark}66 100%)`,
-          }}
-        />
-
-        {/* Floating symbols inside island */}
-        {island.symbols.map((s, i) => (
-          <FloatingSymbol key={i} sym={s} delay={i * 0.4} color="rgba(255,255,255,0.75)" />
-        ))}
-
-        {/* Icon plate */}
-        <div
-          className="relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center mb-3 shadow-lg transition-transform duration-500"
-          style={{
-            background: "rgba(255,255,255,0.92)",
-            transform: hovered ? "scale(1.15) translateY(-4px)" : "scale(1)",
-            boxShadow: `0 8px 20px ${island.glow}`,
-          }}
-        >
-          <Icon size={30} style={{ color: island.dark }} />
-          {hovered && (
-            <div className="absolute inset-0 rounded-2xl animate-ping" style={{ background: `${island.color}40` }} />
-          )}
-        </div>
-
-        {/* Island name */}
-        <div
-          className="relative z-10 px-4 py-2 rounded-xl text-center transition-transform duration-300"
-          style={{
-            background: "rgba(255,255,255,0.9)",
-            backdropFilter: "blur(8px)",
-            transform: hovered ? "scale(1.08)" : "scale(1)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-          }}
-        >
-          <p className="font-pixel text-xs text-slate-700 leading-tight">{island.name}</p>
-          <p className="text-[10px] text-slate-500 mt-0.5">{island.tagline}</p>
-        </div>
-
-        {/* Click hint */}
-        {hovered && (
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[11px] font-bold text-slate-500 animate-bounce">
-            ✦ Click to explore ✦
+        <div className="relative">
+          <CloudSvg w={240} fill={cat.fill} glow={cat.glow} hovered={hov} />
+          <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ top: "14px" }}>
+            <motion.span className="text-3xl leading-none mb-1"
+              animate={hov ? { y: -4, scale: 1.2 } : { y: 0, scale: 1 }}
+              transition={{ duration: 0.25 }}>
+              {cat.emoji}
+            </motion.span>
+            <p className="font-pixel text-base" style={{ color: cat.textColor, textShadow: "0 1px 3px rgba(255,255,255,0.8)" }}>
+              {cat.label}
+            </p>
+            <p className="text-[10px] font-semibold mt-0.5" style={{ color: cat.textColor, opacity: 0.7 }}>
+              {cat.tagline}
+            </p>
           </div>
-        )}
-      </div>
-    </div>
+          <AnimatePresence>
+            {hov && (
+              <motion.div className="absolute inset-0 pointer-events-none"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                style={{ background: `radial-gradient(ellipse, ${cat.glow}55 0%, transparent 70%)`, filter: "blur(14px)", zIndex: -1 }} />
+            )}
+          </AnimatePresence>
+        </div>
+        <AnimatePresence>
+          {hov && (
+            <motion.div className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-pixel"
+              style={{ bottom: "-22px", fontSize: "11px", color: "rgba(255,255,255,0.9)", textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}
+              initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
+              ✦ click to explore ✦
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
   );
 }
 
-function ProjectCard({ project, accentColor }: { project: Project; accentColor: string }) {
+// ─── Project Cloud Card ────────────────────────────────────────────────────────
+function ProjectCloudCard({ project, cat }: { project: Project; cat: typeof CATEGORIES[0] }) {
+  const [hov, setHov] = useState(false);
+  const [open, setOpen] = useState(false);
+
   return (
-    <div
-      className="flex-shrink-0 w-72 rounded-2xl overflow-hidden group transition-all duration-300 hover:-translate-y-2"
-      style={{
-        background: "rgba(255,255,255,0.78)",
-        backdropFilter: "blur(16px)",
-        border: `1.5px solid ${accentColor}40`,
-        boxShadow: `0 8px 32px rgba(0,0,0,0.08), 0 0 0 0 ${accentColor}`,
-      }}
-    >
-      {/* Color banner */}
-      <div
-        className="w-full h-2"
-        style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}88)` }}
-      />
-
-      <div className="p-5">
-        <h4 className="font-pixel text-sm text-slate-800 mb-2 leading-snug">{project.title}</h4>
-        <p className="text-xs text-slate-500 leading-relaxed mb-4">{project.desc}</p>
-
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {project.tech.map((t) => (
-            <span
-              key={t}
-              className="text-[10px] px-2 py-0.5 rounded-full font-semibold text-white"
-              style={{ backgroundColor: accentColor }}
-            >
-              {t}
-            </span>
-          ))}
+    <>
+      <motion.div
+        className="cursor-pointer select-none"
+        onHoverStart={() => setHov(true)}
+        onHoverEnd={() => setHov(false)}
+        onClick={() => setOpen(true)}
+        whileHover={{ scale: 1.08, y: -6 }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ display: "inline-block" }}
+      >
+        <div className="relative">
+          <MiniCloudSvg fill={cat.fill} glow={cat.glow} hovered={hov} />
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-4" style={{ top: "8px", bottom: "4px" }}>
+            <span className="text-xl leading-none mb-1">{project.emoji}</span>
+            <p className="font-pixel text-center leading-tight" style={{ fontSize: "12px", color: cat.textColor, maxWidth: "140px", textShadow: "0 1px 2px rgba(255,255,255,0.9)" }}>
+              {project.title}
+            </p>
+            <div className="flex flex-wrap gap-1 justify-center mt-1.5">
+              {project.tech.slice(0, 2).map(t => (
+                <span key={t} className="text-[8px] px-1.5 py-0.5 rounded-full font-bold"
+                  style={{ background: TAG_COLORS[t] ?? "#e0e0e0", color: "#3d2a5c", border: "1px solid rgba(100,80,150,0.2)" }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
+      </motion.div>
 
-        <div className="flex gap-2">
-          {project.github && (
-            <a
-              href={project.github} target="_blank" rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white bg-slate-800 hover:bg-slate-900 transition-colors"
-            >
-              <Github size={12} /> GitHub
-            </a>
+      {/* Mini modal */}
+      <AnimatePresence>
+        {open && (
+          <motion.div className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => setOpen(false)}>
+            <div className="absolute inset-0" style={{ background: "rgba(10,5,30,0.65)", backdropFilter: "blur(6px)" }} />
+            <motion.div className="relative max-w-xs w-full rounded-3xl overflow-hidden z-10"
+              style={{ background: `linear-gradient(145deg, rgba(255,255,255,0.97) 0%, ${cat.fill} 100%)`, border: `2px solid ${cat.border}`, boxShadow: `0 20px 60px rgba(0,0,0,0.25), 0 0 40px ${cat.glow}44` }}
+              initial={{ scale: 0.85, y: 30, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.85, y: 30, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              onClick={e => e.stopPropagation()}>
+              <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${cat.glow}, ${cat.border})` }} />
+              {/* ── Project preview image ── */}
+              {project.image && (
+                <div className="relative w-full overflow-hidden" style={{ height: "150px" }}>
+                  <img
+                    src={project.image}
+                    alt={`${project.title} preview`}
+                    className="w-full h-full object-cover"
+                    style={{ borderBottom: `1.5px solid ${cat.border}` }}
+                  />
+                  {/* dreamy gradient overlay at bottom of image */}
+                  <div className="absolute inset-x-0 bottom-0 h-10"
+                    style={{ background: `linear-gradient(to top, rgba(255,255,255,0.97), transparent)` }} />
+                </div>
+              )}
+              {!project.image && (
+                <div className="w-full flex items-center justify-center"
+                  style={{ height: "80px", background: `linear-gradient(135deg, ${cat.fill}, rgba(255,255,255,0.6))` }}>
+                  <span className="text-5xl">{project.emoji}</span>
+                </div>
+              )}
+              <div className="p-5 pt-3">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <span className="text-2xl block mb-1">{project.emoji}</span>
+                    <h3 className="font-pixel text-lg" style={{ color: cat.textColor }}>{project.title}</h3>
+                  </div>
+                  <button onClick={() => setOpen(false)} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/10 transition-all" style={{ color: cat.textColor }}>
+                    <X size={14} />
+                  </button>
+                </div>
+                <p className="text-xs leading-relaxed mb-3" style={{ color: cat.textColor, opacity: 0.8 }}>{project.desc}</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {project.tech.map(t => (
+                    <span key={t} className="text-[9px] px-2 py-0.5 rounded-full font-bold"
+                      style={{ background: TAG_COLORS[t] ?? "#e8e0ff", color: "#3d2a5c", border: "1px solid rgba(100,80,150,0.2)" }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  {project.github && (
+                    <a href={project.github} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold text-white transition-all hover:scale-105"
+                      style={{ background: "linear-gradient(135deg, #2a1a4a, #4a2a7a)" }}>
+                      <Github size={12} /> GitHub
+                    </a>
+                  )}
+                  {project.bandLab && (
+                    <a href={project.bandLab} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold transition-all hover:scale-105"
+                      style={{ background: `linear-gradient(135deg, ${cat.glow}, ${cat.border})`, color: cat.textColor }}>
+                      <Play size={12} /> Listen
+                    </a>
+                  )}
+                  {project.youtube && project.youtube !== "#" && (
+                    <a href={project.youtube} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold transition-all hover:scale-105"
+                      style={{ background: `linear-gradient(135deg, ${cat.glow}, ${cat.border})`, color: cat.textColor }}>
+                      <ExternalLink size={12} /> Watch
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+// ─── Category Panel (reveals after clicking a category cloud) ─────────────────
+function CategoryPanel({ cat, projects, onClose }: { cat: typeof CATEGORIES[0]; projects: Project[]; onClose: () => void }) {
+  return (
+    <motion.div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      {/* Dreamy overlay */}
+      <div className="absolute inset-0" style={{ background: "rgba(10,5,30,0.72)", backdropFilter: "blur(8px)" }} />
+
+      <div className="relative z-10 flex flex-col items-center w-full max-w-3xl">
+        {/* Header */}
+        <motion.div className="flex items-center gap-3 mb-8"
+          initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+          <button onClick={onClose}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-pixel text-sm transition-all hover:scale-105"
+            style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.25)" }}>
+            <ChevronLeft size={14} /> back
+          </button>
+          <div className="text-center">
+            <p className="font-pixel text-3xl" style={{ color: "rgba(255,255,255,0.95)", textShadow: `0 0 20px ${cat.glow}` }}>
+              {cat.emoji} {cat.label}
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{cat.tagline}</p>
+          </div>
+        </motion.div>
+
+        {/* Cloud project cards */}
+        <motion.div className="flex flex-wrap gap-6 justify-center"
+          initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+          {projects.length === 0 ? (
+            <div className="text-center">
+              <p className="text-5xl mb-3">🌙</p>
+              <p className="font-pixel text-lg" style={{ color: "rgba(255,255,255,0.6)" }}>Coming soon...</p>
+            </div>
+          ) : (
+            projects.map((p, i) => (
+              <motion.div key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 + i * 0.12 }}>
+                <ProjectCloudCard project={p} cat={cat} />
+              </motion.div>
+            ))
           )}
-          {project.bandLab && (
-            <a
-              href={project.bandLab} target="_blank" rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white transition-colors"
-              style={{ backgroundColor: accentColor }}
-            >
-              <Play size={12} /> Listen
-            </a>
-          )}
-          {project.youtube && project.youtube !== "#" && (
-            <a
-              href={project.youtube} target="_blank" rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white transition-colors"
-              style={{ backgroundColor: accentColor }}
-            >
-              <ExternalLink size={12} /> Watch
-            </a>
-          )}
-          {project.demo && project.demo !== "#" && (
-            <a
-              href={project.demo} target="_blank" rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white transition-colors"
-              style={{ backgroundColor: accentColor }}
-            >
-              <ExternalLink size={12} /> Demo
-            </a>
-          )}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 // ─── Main Component ────────────────────────────────────────────────────────────
-
 export default function ProjectsSectionNew() {
-  const [active, setActive] = useState<typeof ISLANDS[0] | null>(null);
-  const [phase, setPhase] = useState<"map" | "in" | "island" | "out">("map");
-  const particles = useRef(
-    Array.from({ length: 28 }, (_, i) => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      color: ["#A3C9A8", "#89C2D9", "#FFAFCC", "#E2D4F0", "#FFE5B4"][i % 5],
-      delay: i * 0.35,
-    }))
-  ).current;
+  const [activeCategory, setActiveCategory] = useState<typeof CATEGORIES[0] | null>(null);
 
-  const openIsland = (island: typeof ISLANDS[0]) => {
-    setActive(island);
-    setPhase("in");
-    setTimeout(() => setPhase("island"), 650);
-  };
-
-  const closeIsland = () => {
-    setPhase("out");
-    setTimeout(() => { setPhase("map"); setActive(null); }, 650);
-  };
-
-  const filtered = active ? PROJECTS.filter((p) => p.category === active.id) : [];
+  const filtered = activeCategory ? PROJECTS.filter(p => p.category === activeCategory.id) : [];
 
   return (
-    <section id="projects" className="relative min-h-screen py-24 overflow-hidden flex flex-col items-center">
-      <style>{`
-        @keyframes islandFloat {
-          0%,100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-10px) rotate(0.4deg); }
-          66% { transform: translateY(-4px) rotate(-0.4deg); }
-        }
-        @keyframes floatSym {
-          0%,100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
-          50% { transform: translateY(-10px) rotate(8deg); opacity: 0.9; }
-        }
-        @keyframes waterShimmer {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes waterRipple {
-          0% { transform: scale(0.6); opacity: 0.6; }
-          100% { transform: scale(2.2); opacity: 0; }
-        }
-        @keyframes waveMove {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes cloudDrift {
-          from { transform: translateX(-150px); }
-          to { transform: translateX(110vw); }
-        }
-        @keyframes pathGlow {
-          0%,100% { opacity: 0.25; }
-          50% { opacity: 0.6; }
-        }
-        @keyframes fadeScale {
-          from { opacity: 0; transform: scale(0.94); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes floatParticle {
-          0%,100% { transform: translate(0,0); opacity: 0.5; }
-          50% { transform: translate(6px,-12px); opacity: 1; }
-        }
-        .path-glow { animation: pathGlow 3s ease-in-out infinite; }
-        .cloud-drift { animation: cloudDrift linear infinite; }
-        .fade-scale { animation: fadeScale 0.5s ease forwards; }
-        .water-ripple-ring {
-          position: absolute;
-          border-radius: 50%;
-          border: 1.5px solid rgba(255,255,255,0.45);
-          animation: waterRipple 3.5s ease-out infinite;
-          pointer-events: none;
-        }
-      `}</style>
-
-      {/* ── Section header ── */}
-      <div
-        className="relative z-10 text-center mb-10 transition-all duration-500"
-        style={{ opacity: phase === "map" ? 1 : 0, pointerEvents: phase === "map" ? "auto" : "none" }}
-      >
-        <div className="inline-flex items-center gap-2 mb-3 px-4 py-1.5 rounded-full bg-white/60 border border-white/70 backdrop-blur-sm shadow-sm">
-          <Sparkles size={14} className="text-amber-400" />
-          <span className="text-xs font-semibold text-slate-500 tracking-widest uppercase">Interactive World Map</span>
-          <Sparkles size={14} className="text-amber-400" />
-        </div>
-        <h2 className="font-pixel text-3xl md:text-5xl text-[#2C3E50] mb-3">My Creative World</h2>
-        <p className="text-slate-500 max-w-md mx-auto text-sm leading-relaxed">
-          Three islands, one universe. Click an island to explore the artifacts within.
-        </p>
+    <section id="projects" className="relative w-full overflow-hidden" style={{ minHeight: "100vh" }}>
+      {/* GIF background */}
+      <div className="absolute inset-0 z-0">
+        <img src="/assets/gif/cat-claud.gif" alt="cozy pixel world" className="w-full h-full object-cover"
+          style={{ imageRendering: "pixelated" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 30%, rgba(8,4,20,0.38) 100%)" }} />
       </div>
 
-      {/* ── World Map ── */}
-      <div className="relative w-full max-w-6xl mx-auto px-4">
-        <div
-          className="relative w-full rounded-[40px] overflow-hidden border-4 border-white/50 shadow-2xl"
-          style={{
-            height: "clamp(440px, 70vh, 720px)",
-            background: "linear-gradient(180deg, #6ec6ea 0%, #4ab8e8 15%, #3aace0 35%, #5dc0e8 55%, #4ab5d8 75%, #62cce0 100%)",
-          }}
-        >
-          {/* ── Animated water base layers ── */}
-          {/* Deep shimmer */}
-          <div className="absolute inset-0 pointer-events-none"
-            style={{
-              background: "linear-gradient(180deg, #6ecfee88 0%, #3aa8d844 40%, #5bbfe844 100%)",
-              backgroundSize: "200% 200%",
-              animation: "waterShimmer 8s ease infinite",
-            }}
-          />
-
-          {/* Wave pattern layer 1 */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ opacity: 0.18 }}>
-            <svg width="200%" height="100%" viewBox="0 0 2400 100" preserveAspectRatio="none"
-              style={{ animation: "waveMove 6s linear infinite" }}>
-              <path d="M0,40 C200,70 400,10 600,40 C800,70 1000,10 1200,40 C1400,70 1600,10 1800,40 C2000,70 2200,10 2400,40 L2400,100 L0,100Z"
-                fill="rgba(255,255,255,0.6)" />
-            </svg>
-          </div>
-
-          {/* Wave pattern layer 2 (offset) */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ opacity: 0.12, top: "20%" }}>
-            <svg width="200%" height="80%" viewBox="0 0 2400 80" preserveAspectRatio="none"
-              style={{ animation: "waveMove 10s linear infinite reverse" }}>
-              <path d="M0,30 C300,55 500,5 800,30 C1100,55 1300,5 1600,30 C1900,55 2100,5 2400,30 L2400,80 L0,80Z"
-                fill="rgba(255,255,255,0.5)" />
-            </svg>
-          </div>
-
-          {/* Sparkle glints on water surface */}
-          {[{x:12,y:18},{x:35,y:72},{x:58,y:14},{x:78,y:62},{x:22,y:50},{x:88,y:30},{x:50,y:85},{x:68,y:45}].map((g,i)=>(
-            <div key={i} className="absolute pointer-events-none"
-              style={{
-                left:`${g.x}%`, top:`${g.y}%`,
-                width:6, height:6,
-                background:"rgba(255,255,255,0.9)",
-                borderRadius:"50%",
-                boxShadow:"0 0 8px 3px rgba(255,255,255,0.6)",
-                animation:`floatParticle ${2.5+i*0.4}s ease-in-out infinite`,
-                animationDelay:`${i*0.5}s`,
-              }}
-            />
-          ))}
-
-          {/* Water ripple rings at random spots */}
-          {[{x:"15%",y:"25%",s:60,d:"0s"},{x:"72%",y:"55%",s:80,d:"1.2s"},{x:"45%",y:"75%",s:50,d:"2.3s"},{x:"85%",y:"20%",s:45,d:"0.7s"}].map((r,i)=>(
-            <div key={i} className="water-ripple-ring"
-              style={{ left:r.x, top:r.y, width:r.s, height:r.s, animationDelay:r.d,
-                transform:`translate(-50%,-50%)` }}
-            />
-          ))}
-
-          {/* Island color reflection pools (under each island) */}
-          {ISLANDS.map((isl) => (
-            <div key={isl.id} className="absolute pointer-events-none"
-              style={{
-                left: `${isl.x + isl.size * 0.03}%`,
-                top: `${isl.y + 12}%`,
-                width: isl.size * 1.5,
-                height: isl.size * 0.6,
-                background: `radial-gradient(ellipse, ${isl.color}55 0%, ${isl.color}22 50%, transparent 75%)`,
-                filter: "blur(18px)",
-                transform: "scaleY(0.6)",
-              }}
-            />
-          ))}
-
-          {/* Glowing paths connecting islands */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            </defs>
-            {/* Web Dev → Music Lake */}
-            <path d="M 30% 47% Q 45% 25% 68% 35%" stroke="rgba(163,201,168,0.55)" strokeWidth="3" fill="none"
-              strokeDasharray="8 6" filter="url(#glow)" className="path-glow" />
-            {/* Web Dev → Creative Studio */}
-            <path d="M 30% 52% Q 40% 68% 52% 68%" stroke="rgba(255,175,204,0.5)" strokeWidth="3" fill="none"
-              strokeDasharray="6 8" filter="url(#glow)" className="path-glow" />
-            {/* Music Lake → Creative Studio */}
-            <path d="M 72% 42% Q 68% 58% 57% 65%" stroke="rgba(137,194,217,0.5)" strokeWidth="3" fill="none"
-              strokeDasharray="7 5" filter="url(#glow)" className="path-glow" />
-          </svg>
-
-          {/* Clouds */}
-          {[
-            { top: "8%", dur: "38s", size: 80, delay: "0s" },
-            { top: "22%", dur: "55s", size: 110, delay: "-18s" },
-            { top: "70%", dur: "44s", size: 65, delay: "-9s" },
-          ].map((c, i) => (
-            <div key={i} className="cloud-drift absolute pointer-events-none opacity-60"
-              style={{ top: c.top, animationDuration: c.dur, animationDelay: c.delay }}>
-              <svg width={c.size} height={c.size * 0.55} viewBox="0 0 120 70" fill="none">
-                <ellipse cx="60" cy="50" rx="55" ry="22" fill="rgba(255,255,255,0.85)" />
-                <ellipse cx="40" cy="38" rx="28" ry="22" fill="rgba(255,255,255,0.85)" />
-                <ellipse cx="72" cy="34" rx="22" ry="18" fill="rgba(255,255,255,0.85)" />
-              </svg>
-            </div>
-          ))}
-
-          {/* Star decorations */}
-          {[{ x: 8, y: 10 }, { x: 88, y: 8 }, { x: 12, y: 80 }, { x: 85, y: 78 }, { x: 50, y: 6 }].map((s, i) => (
-            <Star key={i} size={10 + i * 2} className="absolute pointer-events-none"
-              style={{ left: `${s.x}%`, top: `${s.y}%`, color: "#FFD700", opacity: 0.5,
-                animation: `floatSym ${2 + i}s ease-in-out infinite`, animationDelay: `${i * 0.7}s` }} />
-          ))}
-
-          {/* Islands */}
-          {ISLANDS.map((island) => (
-            <IslandCard key={island.id} island={island} onClick={() => openIsland(island)} />
-          ))}
-
-          {/* Cinematic fade overlay */}
-          <div className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-600"
-            style={{
-              background: active ? active.color + "22" : "transparent",
-              opacity: phase === "in" || phase === "out" ? 1 : 0,
-              backdropFilter: phase === "in" || phase === "out" ? "blur(8px)" : "none",
-            }}
-          />
-
-          {/* Island Detail Panel */}
-          {active && phase === "island" && (
-            <div className="absolute inset-0 z-40 flex flex-col fade-scale"
-              style={{
-                background: `linear-gradient(160deg, ${active.color}18 0%, #FDFBF7 50%)`,
-                backdropFilter: "blur(4px)",
-              }}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/40">
-                <button
-                  onClick={closeIsland}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 hover:bg-white border border-white/60 text-slate-700 text-sm font-bold transition-all hover:shadow-md"
-                >
-                  <ChevronLeft size={16} /> World Map
-                </button>
-
-                <div className="flex items-center gap-3 px-5 py-2 rounded-2xl bg-white/80 border border-white/60 backdrop-blur-sm">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: active.color }}>
-                    <active.icon size={16} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="font-pixel text-sm text-slate-800">{active.name}</p>
-                    <p className="text-[11px] text-slate-500">{active.tagline}</p>
-                  </div>
-                </div>
-
-                <div className="text-xs text-slate-400 font-medium hidden md:block">
-                  {filtered.length} artifact{filtered.length !== 1 ? "s" : ""} found
-                </div>
-              </div>
-
-              {/* Project cards */}
-              <div className="flex-1 overflow-auto p-6">
-                {filtered.length > 0 ? (
-                  <div className="flex gap-5 flex-wrap justify-center">
-                    {filtered.map((p) => (
-                      <ProjectCard key={p.id} project={p} accentColor={active.color} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-center gap-4">
-                    <div className="text-5xl">🗺️</div>
-                    <h4 className="font-pixel text-xl text-slate-500">Uncharted Territory</h4>
-                    <p className="text-slate-400 text-sm">No artifacts discovered here yet — check back soon!</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Legend */}
-        <div
-          className="flex items-center justify-center gap-6 mt-6 flex-wrap transition-all duration-500"
-          style={{ opacity: phase === "map" ? 1 : 0 }}
-        >
-          {ISLANDS.map((isl) => {
-            const Icon = isl.icon;
-            return (
-              <button key={isl.id} onClick={() => openIsland(isl)}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-white/60 backdrop-blur-sm hover:shadow-md transition-all hover:-translate-y-0.5"
-              >
-                <div className="w-6 h-6 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: isl.color }}>
-                  <Icon size={12} className="text-white" />
-                </div>
-                <span className="text-xs font-bold text-slate-600">{isl.name}</span>
-              </button>
-            );
-          })}
-        </div>
+      {/* Ambient sparkles */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        {SPARKLES.map(s => (
+          <motion.div key={s.id} className="absolute rounded-full"
+            style={{ left: `${s.x}%`, top: `${s.y}%`, width: s.size, height: s.size, backgroundColor: s.color, boxShadow: `0 0 ${s.size * 2}px ${s.color}` }}
+            animate={{ y: [-8, 8, -8], opacity: [0.3, 0.9, 0.3], scale: [0.8, 1.2, 0.8] }}
+            transition={{ duration: s.dur, repeat: Infinity, delay: s.delay, ease: "easeInOut" }} />
+        ))}
       </div>
+
+      {/* Section header */}
+      <div className="relative z-10 pt-12 flex flex-col items-center gap-1 pointer-events-none">
+        <motion.p className="font-pixel text-sm tracking-widest"
+          style={{ color: "rgba(255,255,255,0.7)", textShadow: "0 2px 8px rgba(0,0,0,0.6)", letterSpacing: "0.2em" }}
+          initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+          ✦ my dream world ✦
+        </motion.p>
+        <motion.h2 className="font-pixel text-4xl md:text-5xl"
+          style={{ color: "rgba(255,255,255,0.93)", textShadow: "0 3px 20px rgba(80,0,120,0.8), 0 1px 4px rgba(0,0,0,0.8)" }}
+          initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}>
+          Creative Projects
+        </motion.h2>
+        <motion.p className="font-pixel text-xs mt-1"
+          style={{ color: "rgba(255,255,255,0.45)", textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
+          click a cloud to explore
+        </motion.p>
+      </div>
+
+      {/* Category clouds floating in the scene */}
+      <div className="relative z-10 mx-auto" style={{ width: "100%", maxWidth: "1100px", height: "clamp(520px, 72vh, 800px)", marginTop: "12px" }}>
+        {CATEGORIES.map((cat, i) => (
+          <CategoryCloud key={cat.id} cat={cat} delay={0.2 + i * 0.18} onClick={() => setActiveCategory(cat)} />
+        ))}
+      </div>
+
+      {/* Category panel overlay */}
+      <AnimatePresence>
+        {activeCategory && (
+          <CategoryPanel
+            cat={activeCategory}
+            projects={filtered}
+            onClose={() => setActiveCategory(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

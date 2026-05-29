@@ -66,7 +66,7 @@ export default function HeroSectionNew() {
               href="#projects"
               className="group flex items-center gap-2 px-8 py-4 bg-[#2C3E50] text-white rounded-2xl font-semibold hover:bg-[#3d566e] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
             >
-              Explore Map
+              Explore Cloud
               <MapIcon
                 size={18}
                 className="group-hover:rotate-12 transition-transform"
