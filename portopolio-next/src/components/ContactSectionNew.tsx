@@ -29,9 +29,16 @@ export default function ContactSectionNew() {
               type="email" 
               placeholder="Your email address" 
               className="w-full px-5 py-4 rounded-xl border-2 border-slate-200 bg-white/80 focus:outline-none focus:border-[#A3C9A8] transition-colors"
+              required
+            />
+            <textarea 
+              placeholder="Write your message here..." 
+              rows={4}
+              className="w-full px-5 py-4 rounded-xl border-2 border-slate-200 bg-white/80 focus:outline-none focus:border-[#A3C9A8] transition-colors resize-none"
+              required
             />
             <button 
-              type="button" 
+              type="submit" 
               className="w-full px-5 py-4 rounded-xl bg-[#2C3E50] text-white font-bold tracking-wide hover:bg-[#3d566e] transition-colors flex items-center justify-center gap-2 group"
             >
               Send Message

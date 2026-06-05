@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Code2, Music, Video, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function SkillsSection() {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -341,7 +342,7 @@ export default function SkillsSection() {
               <div
                 key={node.id}
                 className="relative"
-                onMouseEnter={() => setHoveredNode(node.id)}
+                onMouseEnter={() => handleNodeHover(node.id, node.color)}
                 onMouseLeave={() => setHoveredNode(null)}
               >
 
@@ -424,9 +425,32 @@ export default function SkillsSection() {
                       }}
                     />
 
+                    {/* fountain drops particles */}
+                    {fountains.find(f => f.id === node.id)?.drops.map((drop) => (
+                      <motion.div
+                        key={drop.id}
+                        className="absolute w-2.5 h-2.5 rounded-full pointer-events-none z-20"
+                        style={{
+                          backgroundColor: drop.color,
+                          boxShadow: `0 0 8px ${drop.color}`,
+                          left: "50%",
+                          top: "50%",
+                          marginLeft: "-5px",
+                          marginTop: "-5px",
+                        }}
+                        animate={{
+                          x: [0, parseFloat(drop.tx)],
+                          y: [0, parseFloat(drop.ty)],
+                          opacity: [1, 0],
+                          scale: [1, 0.3],
+                        }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                      />
+                    ))}
+
                     {/* node */}
                     <div
-                      className="w-16 h-16 rounded-full border-4 border-white shadow-2xl flex items-center justify-center transition-all duration-500"
+                      className="w-16 h-16 rounded-full border-4 border-white shadow-2xl flex items-center justify-center transition-all duration-500 cursor-pointer"
                       style={{
                         backgroundColor: isHovered ? node.color : "#fff",
                         boxShadow: `0 0 30px ${node.color}60`,
@@ -514,13 +538,38 @@ export default function SkillsSection() {
                   <div className="absolute left-6 top-0 bottom-0 w-[6px] rounded-full bg-gradient-to-b from-cyan-200 via-sky-300 to-cyan-200" />
 
                   {/* mobile node */}
-                  <div
-                    className="absolute left-0 top-8 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center shadow-xl"
-                    style={{
-                      backgroundColor: node.color,
-                    }}
-                  >
-                    <node.icon size={20} color="#fff" />
+                  <div className="absolute left-0 top-8 w-12 h-12 flex items-center justify-center">
+                    {/* fountain drops particles */}
+                    {fountains.find(f => f.id === node.id)?.drops.map((drop) => (
+                      <motion.div
+                        key={drop.id}
+                        className="absolute w-2 h-2 rounded-full pointer-events-none z-20"
+                        style={{
+                          backgroundColor: drop.color,
+                          boxShadow: `0 0 6px ${drop.color}`,
+                          left: "50%",
+                          top: "50%",
+                          marginLeft: "-4px",
+                          marginTop: "-4px",
+                        }}
+                        animate={{
+                          x: [0, parseFloat(drop.tx) * 0.7],
+                          y: [0, parseFloat(drop.ty) * 0.7],
+                          opacity: [1, 0],
+                          scale: [1, 0.3],
+                        }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                      />
+                    ))}
+
+                    <div
+                      className="w-full h-full rounded-full border-4 border-white flex items-center justify-center shadow-xl"
+                      style={{
+                        backgroundColor: node.color,
+                      }}
+                    >
+                      <node.icon size={20} color="#fff" />
+                    </div>
                   </div>
 
                   <div className="glass-card rounded-[2rem] p-6">

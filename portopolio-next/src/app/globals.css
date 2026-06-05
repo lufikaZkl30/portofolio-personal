@@ -72,6 +72,10 @@
     animation: float 6s ease-in-out infinite;
   }
 
+  .animate-float-slow {
+    animation: float 10s ease-in-out infinite;
+  }
+
   .animate-float-delayed {
     animation: float 7s ease-in-out infinite 2s;
   }
