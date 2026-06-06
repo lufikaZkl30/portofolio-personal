@@ -62,7 +62,7 @@ const CATEGORIES = [
     id: "code" as const,
     label: "Code",
     emoji: "⌨️",
-    tagline: "Web Dev Village",
+    tagline: "Web Dev",
     fill: "rgba(210,195,255,0.88)",
     glow: "#b8a4f8",
     border: "#ccc0ff",

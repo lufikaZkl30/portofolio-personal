@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Press_Start_2P, Space_Grotesk, VT323 } from "next/font/google";
 import "./globals.css";
 
-
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const pressStart2P = Press_Start_2P({ 
   weight: "400", 
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
   title: "Lufika Ayu Fatimah |  Portfolio - Personal Website",
   description: "UI/UX Designer & Front-End Developer & AI Developer Portfolio",
   icons: {
-    icon: "/img/icon-web.jpeg",
+    icon: "/assets/images/icon-web.jpeg",
   },
 };
 
@@ -35,7 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${inter.variable} ${pressStart2P.variable} ${spaceGrotesk.variable} ${vt323.variable} font-sans bg-[#FDFBF7] text-[#2C3E50] overflow-x-hidden relative cursor-crosshair`} suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${pressStart2P.variable} ${spaceGrotesk.variable} ${vt323.variable} font-sans bg-[#FDFBF7] text-[#2C3E50] overflow-x-hidden relative cursor-crosshair`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
