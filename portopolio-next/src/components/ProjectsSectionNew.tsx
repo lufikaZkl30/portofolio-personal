@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, Play, X, ChevronLeft } from "lucide-react";
+import { Github, ExternalLink, Play, X, ChevronLeft, Cloud } from "lucide-react";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface Project {
@@ -15,6 +15,8 @@ interface Project {
   demo?: string;
   bandLab?: string;
   youtube?: string;
+  tiktok?: string;
+  soundcloud?: string;
   emoji: string;
   image?: string; // preview screenshot
 }
@@ -45,14 +47,17 @@ const PROJECTS: Project[] = [
   {
     id: 4, title: "Loser In You", category: "music", emoji: "🎵",
     desc: "A song about the loss of a once-close friendship — lingering memories.",
-    tech: ["BandLab", "R&B & Soul", "Mixing"],
+    tech: ["R&B & Soul", "Mixing", "Type Beat", "Emotional"],
     bandLab: "https://www.bandlab.com/post/d733931e-5776-49c3-9cd6-d1dcdfd835f1",
+    soundcloud: "https://soundcloud.com/130530_xywnzenle/loser-in-you-prod-lotus",
     image: "/assets/images/music-1.png",
   },
   {
-    id: 5, title: "Anime Velocity Edit", category: "edit", emoji: "🎬",
-    desc: "Cinematic anime edit with fast transitions and smooth velocity effects.",
-    tech: ["After Effects", "AMV"],
+    id: 5, title: "Tiktok Content Creator", category: "edit", emoji: "🎬",
+    desc: "Creating engaging content for TikTok with creative editing and effects.",
+    tech: ["CapCut", "InShot", "Canva"],
+    tiktok: "https://www.tiktok.com/@xyawnzenle13",
+    image: "/assets/images/tiktok.png",
   },
 ];
 
@@ -315,7 +320,7 @@ function ProjectCloudCard({ project, cat }: { project: Project; cat: typeof CATE
                     <a href={project.bandLab} target="_blank" rel="noopener noreferrer"
                       className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold transition-all hover:scale-105"
                       style={{ background: `linear-gradient(135deg, ${cat.glow}, ${cat.border})`, color: cat.textColor }}>
-                      <Play size={12} /> Listen
+                      <Play size={12} /> BandLab
                     </a>
                   )}
                   {project.youtube && project.youtube !== "#" && (
@@ -323,6 +328,20 @@ function ProjectCloudCard({ project, cat }: { project: Project; cat: typeof CATE
                       className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold transition-all hover:scale-105"
                       style={{ background: `linear-gradient(135deg, ${cat.glow}, ${cat.border})`, color: cat.textColor }}>
                       <ExternalLink size={12} /> Watch
+                    </a>
+                  )}
+                  {project.tiktok && (
+                    <a href={project.tiktok} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold text-white transition-all hover:scale-105"
+                      style={{ background: "linear-gradient(135deg, #010101, #ff0050)" }}>
+                      <Play size={12} /> Watch
+                    </a>
+                  )}
+                  {project.soundcloud && (
+                    <a href={project.soundcloud} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-2xl text-xs font-bold text-white transition-all hover:scale-105"
+                      style={{ background: "linear-gradient(135deg, #ff5500, #ff8800)" }}>
+                      <Cloud size={12} /> SoundCloud
                     </a>
                   )}
                 </div>

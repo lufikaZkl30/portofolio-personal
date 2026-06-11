@@ -35,40 +35,55 @@ export default function SkillsSection() {
   };
 
   const journeyNodes = [
-    {
-      id: 'music',
-      title: 'The Spring of Sound',
-      subtitle: 'Music Production',
-      icon: Music,
-      color: '#D4A373',
-      align: 'left',
-      startYear: 2019,
-      desc: 'A wellspring of inspiration where I craft melodies, harmonies, and ambient soundscapes.',
-      skills: ['Ableton Live', 'Synthesizers', 'Mixing & Mastering', 'Foley & Sound Design']
-    },
-    {
-      id: 'code',
-      title: 'The Logic River',
-      subtitle: 'Web Development',
-      icon: Code2,
-      color: '#A3C9A8',
-      align: 'right',
-      startYear: 2022,
-      desc: 'A rushing stream where logic and design flow into an interactive experience.',
-      skills: ['React & Next.js', 'Tailwind CSS', 'JavaScript (ES6+)', 'Framer Motion']
-    },
-    {
-      id: 'edit',
-      title: 'The Visual Delta',
-      subtitle: 'Creative Editing',
-      icon: Video,
-      color: '#A2D2FF',
-      align: 'left',
-      startYear: 2025,
-      desc: 'The mouth where sound and interaction are united into a cinematic masterpiece.',
-      skills: ['Premiere Pro', 'After Effects', 'Color Grading', 'Motion Graphics']
-    }
-  ];
+  {
+    id: 'music',
+    title: 'The Spring of Sound',
+    subtitle: 'Music Production',
+    icon: Music,
+    color: '#D4A373',
+    align: 'left',
+    startYear: 2019,
+    desc: 'A wellspring of inspiration where I craft melodies, harmonies, and immersive soundscapes.',
+    skills: [
+      'Songwriting',
+      'Music Arrangement',
+      'Mixing & Mastering',
+      'Sound Design'
+    ]
+  },
+  {
+    id: 'code',
+    title: 'The Logic River',
+    subtitle: 'Web Development',
+    icon: Code2,
+    color: '#A3C9A8',
+    align: 'right',
+    startYear: 2022,
+    desc: 'A rushing stream where logic and creativity merge into interactive digital experiences.',
+    skills: [
+      'Front-End Development',
+      'Responsive Design',
+      'UI Implementation',
+      'Web Optimization'
+    ]
+  },
+  {
+    id: 'edit',
+    title: 'The Visual Delta',
+    subtitle: 'Creative Editing',
+    icon: Video,
+    color: '#A2D2FF',
+    align: 'left',
+    startYear: 2025,
+    desc: 'The place where visuals, motion, and storytelling come together.',
+    skills: [
+      'Video Editing',
+      'Visual Design',
+      'Motion Graphics',
+      'Visual Storytelling'
+    ]
+  }
+];
 
   return (
   <section
