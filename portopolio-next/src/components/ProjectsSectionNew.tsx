@@ -57,7 +57,7 @@ const PROJECTS: Project[] = [
     desc: "Creating engaging content for TikTok with creative editing and effects.",
     tech: ["CapCut", "InShot", "Canva"],
     tiktok: "https://www.tiktok.com/@xyawnzenle13",
-    image: "/assets/images/tiktok.png",
+    image: "/assets/images/project-4.png",
   },
 ];
 
