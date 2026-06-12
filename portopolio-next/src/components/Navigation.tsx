@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { 
   Code2, Video, Music, MonitorPlay, 
-  Map as MapIcon, Tent, Star, User
+  Map as MapIcon, Tent, Star, User, Backpack
 } from "lucide-react";
 
 interface NavigationProps {
@@ -15,6 +15,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
     { id: 'hero', label: 'Start', icon: Star },
     { id: 'about', label: 'Story', icon: User },
     { id: 'skills', label: 'Guilds', icon: MonitorPlay },
+    { id: 'tools', label: 'Gear', icon: Backpack },
     { id: 'projects', label: 'Artifacts', icon: Code2 },
     { id: 'contact', label: 'Camp', icon: Tent }
   ];
@@ -29,14 +30,19 @@ export default function Navigation({ activeSection }: NavigationProps) {
               key={item.id}
               href={`#${item.id}`}
               className={`
-                flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300
+                group flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300
                 ${activeSection === item.id 
-                  ? 'bg-[#A3C9A8] text-white shadow-md transform scale-105' 
-                  : 'text-slate-600 hover:bg-white hover:text-[#2C3E50] hover:-translate-y-1'
+                  ? 'bg-[#A3C9A8] text-white shadow-md scale-105' 
+                  : 'text-slate-600 hover:bg-white/80 hover:text-[#2C3E50] hover:scale-105'
                 }
               `}
             >
-              <IconComponent size={18} className={activeSection === item.id ? 'animate-pulse' : ''} />
+              <IconComponent 
+                size={18} 
+                className={`transition-transform duration-300 group-hover:scale-115 ${
+                  activeSection === item.id ? 'animate-pulse' : ''
+                }`} 
+              />
               <span className="hidden md:block font-medium text-sm tracking-wide">{item.label}</span>
             </a>
           );

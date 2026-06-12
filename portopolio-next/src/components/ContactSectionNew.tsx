@@ -1,6 +1,6 @@
 "use client";
 
-import { Tent, Send, Github, Twitter, Linkedin, Cloud } from "lucide-react";
+import { Tent, Send, Github, Linkedin, Cloud, Music } from "lucide-react";
 
 export default function ContactSectionNew() {
   return (
@@ -47,9 +47,11 @@ export default function ContactSectionNew() {
           </form>
 
           <div className="flex items-center justify-center gap-6 relative z-10 pt-8 border-t border-slate-200">
+            {/* github */}
             <a href="https://github.com/lufikaZkl30" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
               <Github size={24} />
             </a>
+            {/* soundcloud */}
             <a className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#ff7700] hover:scale-110 transition-all hover:border-[#ff7700]"
               href="https://soundcloud.com/130530_xywnzenle"
               target="_blank"
@@ -57,6 +59,15 @@ export default function ContactSectionNew() {
             >
               <Cloud size={24} />
             </a>
+            {/* bandlab */}
+            <a className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#ff7700] hover:scale-110 transition-all hover:border-[#ff7700]"
+              href="https://www.bandlab.com/xyawnzenle13"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Music size={24} />
+            </a>
+            {/* linkedin */}
             <a href="https://www.linkedin.com/in/lufikaayud/" className="w-12 h-12 rounded-full glass-card bg-white flex items-center justify-center text-slate-600 hover:text-[#2C3E50] hover:scale-110 transition-all hover:border-[#A3C9A8]">
               <Linkedin size={24} />
             </a>

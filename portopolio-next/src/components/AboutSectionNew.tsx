@@ -30,9 +30,9 @@ export default function AboutSectionNew() {
                     />
                  </div>
                  <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">LUFIKA AYU FATIMAH</h3>
-                 <p className="text-slate-600 text-sm mb-4">Multidisciplinary Creator</p>
-                 <p className="text-slate-600 text-xs italic">"Crafting cozy corners of the internet, one pixel at a time."</p>
-                 <p className="text-slate-600 text-sm">Level 99 Multidisciplinary Artist</p>
+                 <p className="text-slate-600 text-sm mb-4">Creative Developer</p>
+                 <p className="text-slate-600 text-xs italic">"Blending sound, visuals, and technology into one creative journey."</p>
+                 <p className="text-slate-600 text-sm">Specialization: Code • Music • Visuals</p>
                  
                  <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2">
                     <Trees className="text-[#A3C9A8] opacity-50" size={24} />
@@ -44,27 +44,26 @@ export default function AboutSectionNew() {
             {/* Text Content */}
             <div className="space-y-6">
               <div className="glass-card p-8">
-                <p className="text-lg text-slate-700 leading-relaxed mb-4">
-                  I don't just build websites; I craft <strong className="text-[#A3C9A8]">digital environments</strong>. 
-                  My journey started with a fascination for how things look, moved into how they sound, and finally settled on how they work together to make people feel something.
-                </p>
                 <p className="text-lg text-slate-700 leading-relaxed">
-                  Whether I'm writing React components, cutting video frames, or layering synth tracks, my goal is always to create a cozy, memorable space on the internet.
+                  My creative journey began with <strong className="text-[#A3C9A8]">music production</strong>, where I learned how emotions, rhythm, and storytelling could come together through sound. As my curiosity grew, I stepped into <strong className="text-[#A3C9A8]">web development</strong>, discovering how ideas could be transformed into interactive digital experiences through code.
+                </p>
+                <p className="text-lg text-slate-700 leading-relaxed mt-4">
+                  To complete the picture, I explored <strong className="text-[#A3C9A8]">visual editing</strong>, combining sound, visuals, and technology into a single creative process. Today, I enjoy building projects that blend these three worlds together, creating experiences that people can see, hear, and interact with.
                 </p>
               </div>
               
               <div className="flex gap-4">
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#A3C9A8]">
                   <span className="font-pixel text-3xl text-[#2C3E50]">3+</span>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Years Exploring</span>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Years Creating</span>
                 </div>
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#A2D2FF]">
                   <span className="font-pixel text-3xl text-[#2C3E50]">30+</span>
                   <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">CREATIVE PROJECTS</span>
                 </div>
                 <div className="flex-1 glass-card p-4 flex flex-col items-center justify-center text-center interactive-hover border-t-4 border-[#D4A373]">
-                  <span className="font-pixel text-3xl text-[#2C3E50]">∞</span>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">IDEAS & DAYDREAMS</span>
+                  <span className="font-pixel text-3xl text-[#2C3E50]">3</span>
+                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">3 Creative Fields</span>
                 </div>
               </div>
             </div>

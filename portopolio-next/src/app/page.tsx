@@ -6,6 +6,7 @@ import AmbientEnvironment from "@/components/AmbientEnvironment";
 import HeroSectionNew from "@/components/HeroSectionNew";
 import AboutSectionNew from "@/components/AboutSectionNew";
 import SkillsSectionNew from "@/components/SkillsSectionNew";
+import ToolsSection from "@/components/ToolsSection";
 import ProjectsSectionNew from "@/components/ProjectsSectionNew";
 import ContactSectionNew from "@/components/ContactSectionNew";
 
@@ -18,7 +19,7 @@ export default function Home() {
     setMounted(true);
     
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
+      const sections = ['hero', 'about', 'skills', 'tools', 'projects', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -48,6 +49,7 @@ export default function Home() {
         <HeroSectionNew />
         <AboutSectionNew />
         <SkillsSectionNew />
+        <ToolsSection />
         <ProjectsSectionNew />
         <ContactSectionNew />
       </main>
