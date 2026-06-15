@@ -32,7 +32,7 @@ export default function AboutSectionNew() {
                  <h3 className="font-pixel text-2xl text-[#2C3E50] mb-2">LUFIKA AYU FATIMAH</h3>
                  <p className="text-slate-600 text-sm mb-4">Creative Developer</p>
                  <p className="text-slate-600 text-xs italic">"Blending sound, visuals, and technology into one creative journey."</p>
-                 <p className="text-slate-600 text-sm">Specialization: Code • Music • Visuals</p>
+                 <p className="text-slate-600 text-sm">Code • Music • Visuals</p>
                  
                  <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2">
                     <Trees className="text-[#A3C9A8] opacity-50" size={24} />

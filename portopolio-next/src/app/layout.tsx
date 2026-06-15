@@ -20,7 +20,7 @@ const vt323 = VT323({
 });
 
 export const metadata: Metadata = {
-  title: "Lufika Ayu Fatimah |  Portfolio - Personal Website",
+  title: "Lufika Ayu Fatimah |  Portofolio - Personal Website",
   description: "UI/UX Designer & Front-End Developer & AI Developer Portfolio",
   icons: {
     icon: "/assets/images/icon-web.jpeg",

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { 
   Code2, Video, Music, MonitorPlay, 
-  Map as MapIcon, Tent, Star, User, Backpack
+  Map as MapIcon, Mail, Star, User, Backpack
 } from "lucide-react";
 
 interface NavigationProps {
@@ -17,7 +17,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
     { id: 'skills', label: 'Guilds', icon: MonitorPlay },
     { id: 'tools', label: 'Gear', icon: Backpack },
     { id: 'projects', label: 'Artifacts', icon: Code2 },
-    { id: 'contact', label: 'Camp', icon: Tent }
+    { id: 'contact', label: 'Contact', icon: Mail }
   ];
 
   return (
